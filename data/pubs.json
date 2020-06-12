@@ -1,0 +1,112 @@
+[
+    {
+        "title"     : "Z3str4: A Multi-armed String Solver",
+        "conference": "FM '21",
+        "authors"   : "F. Mora, M. Berzish, M. Kulczynski, D. Nowotka, and V. Ganesh",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/fm21a.pdf",
+        "extra"     : "https://z3str4.github.io/",
+        "slides"    : "",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : true
+    },
+    {
+        "title"     : "BanditFuzz: Fuzzing SMT Solvers with Multi-Agent Reinforcement Learning",
+        "conference": "FM '21",
+        "authors"   : "J. Scott, H. Rehman, T. Sudula, F. Mora, and V. Ganesh",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/fm21b.pdf",
+        "extra"     : "",
+        "slides"    : "",
+        "section"   : "Refereed Workshop, Short & Tool Papers",
+        "selected"  : false
+    },
+    {
+        "title"     : "String Theories involving Regular Membership Predicates: From Practice to Theory and Back",
+        "conference": "WORDS '21",
+        "authors"   : "M. Berzish, J. Day, V. Ganesh, M. Kulczynski, F. Manea, F. Mora, and D. Nowotka",
+        "link"      : "https://arxiv.org/abs/2105.07220",
+        "extra"     : "",
+        "slides"    : "",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : false
+    },
+    {
+        "title"     : "Verification by Gambling on Program Slices",
+        "conference": "ATVA '21",
+        "authors"   : "M. Akhundov, F. Mora, N. Feng, V. Hui, and M. Chechik",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/atva21.pdf",
+        "extra"     : "https://github.com/MuradAkh/Qicc",
+        "slides"    : "",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : false
+    },
+    {
+        "title"     : "MedleySolver: Online SMT Algorithm Selection",
+        "conference": "SAT '21",
+        "authors"   : "N. Pimpalkhare, F. Mora, E. Polgreen and S. Seshia",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/sat21.pdf",
+        "extra"     : "https://github.com/uclid-org/medley-solver/tree/SAT2021",
+        "slides"    : "https://people.eecs.berkeley.edu/~fmora/sat21_presentation.pdf",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : true
+    },
+    {
+        "title"     : "An SMT Solver for Regular Expressions and Linear Arithmetic over String Length",
+        "conference": "CAV '21",
+        "authors"   : "M. Berzish, M. Kulczynski, F. Mora, F. Manea, J. Day, D. Nowotka, and V. Ganesh",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/cav21.pdf",
+        "extra"     : "https://figshare.com/s/5ae73a6f3c55f5c5e4c1",
+        "slides"    : "",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : true
+    },
+    {
+        "title"     : "Scaling Client-Specific Equivalence Checking via Impact Boundary Search",
+        "conference": "ASE '20",
+        "authors"   : "N. Feng, F. Mora, V. Hui, and M. Chechik",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/ase20.pdf",
+        "extra"     : "https://github.com/CC24LIFE/CC2",
+        "slides"    : "",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : false
+    },
+    {
+        "title"     : "BanditFuzz: A Reinforcement-Learning Based Performance Fuzzer for SMT Solvers",
+        "conference": "VSTTE '20",
+        "authors"   : "J. Scott, F. Mora, and V. Ganesh",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/vstte20.pdf",
+        "extra"     : "https://github.com/j29scott/BanditFuzz_Public",
+        "slides"    : "https://people.eecs.berkeley.edu/~fmora/smt20_presentation.pdf",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : false
+    },
+    {
+        "title"     : "Synthesis in Uclid5",
+        "conference": "SYNT '20",
+        "authors"   : "F. Mora, K. Cheang, E. Polgreen, and S. Seshia",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/synt20.pdf",
+        "extra"     : "https://github.com/uclid-org/uclid",
+        "slides"    : "https://people.eecs.berkeley.edu/~fmora/synt20_presentation.pdf",
+        "section"   : "Refereed Workshop, Short & Tool Papers",
+        "selected"  : true
+    },
+    {
+        "title"     : "Client-Specific Equivalence Checking",
+        "conference": "ASE '18",
+        "authors"   : "F. Mora, Y. Li, J. Rubin, and M. Chechik",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/ase18.pdf",
+        "extra"     : "https://github.com/Client-Specific-Equivalence-Checker/CLEVER",
+        "slides"    : "https://people.eecs.berkeley.edu/~fmora/ase18_presentation.pdf",
+        "section"   : "Refereed Conference Papers",
+        "selected"  : true
+    },
+    {
+        "title"     : "StringFuzz: A Fuzzer for String Solvers",
+        "conference": "CAV '18",
+        "authors"   : "D. Blotsky, F. Mora, M. Berzish, Y. Zheng, I. Kabir, and V. Ganesh",
+        "link"      : "https://people.eecs.berkeley.edu/~fmora/cav18.pdf",
+        "extra"     : "https://github.com/dblotsky/stringfuzz",
+        "slides"    : "https://easychair.org/smart-slide/slide/pN13#",
+        "section"   : "Refereed Workshop, Short & Tool Papers",
+        "selected"  : true
+    }
+]

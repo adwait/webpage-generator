@@ -1,0 +1,273 @@
+body {
+    font: 18px/1.5 Helvetica, Arial, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    min-width: 350px;
+    width: 90%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    line-height: 1.3;
+    text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+}
+
+p {
+    margin-top: 1em;
+}
+
+small {
+    font-size: 85%;
+}
+
+.footer {
+    font-size: xx-small;
+    text-align: right;
+    padding-top: 5%;
+    color: gray;
+}
+
+.footer a {
+    color: gray;
+    font-weight: 700;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 700;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: 0.25em;
+    margin-top: 1em;
+    font-size: larger;
+}
+
+h3 {
+    font-weight: 500;
+    font-size: medium;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.hbar {
+    margin-left: auto;
+    margin-right: auto;
+    border-top: solid;
+    border-top-width: 2px;
+    margin-bottom: 1em;
+}
+
+.section {
+    margin: 2.5em 0em 0em 0em;
+    font-size: smaller;
+}
+
+/* Start Profile */
+.headshot {
+    margin: 0.3em 3.5% 0.2em 0em;
+    width: 36%;
+    max-width: 240px;
+    float: left;
+    border-radius: 2px;
+}
+
+.profile {
+    margin: 0em 0em 0em 0em;
+}
+/* End Profile */
+
+/* Start News and Pubs */
+.paper {
+    display: flex;
+    margin: 0em 0em 1em 0em;
+}
+
+.news-item {
+    display: flex;
+    margin: 0.5em 0em 0em 0em;
+    font-size: smaller;
+}
+
+.paper-left, .news-left {
+    float: left;
+    width: 10%;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.paper-right,.news-right {
+    float: left;
+    width: 85%;
+}
+
+.icon, .icon-dark {
+    width: 20%;
+    margin-top: 0.25em;
+    margin-right: 0.25em;
+}
+
+.paper-conference {
+    font-size: smaller;
+}
+
+.paper-title {
+    font-style: italic;
+}
+
+/* End News and Pubs */
+
+.paper:before,
+.paper:after,
+#students:before,
+#students:after {
+  content: "";
+  display: block;
+}
+#students:after, .paper:after {
+  clear: both;
+}
+
+/* Start Mentoring */
+.student {
+    margin: 0em 3% 1em 0em;
+    float: left;
+    width: 47%;
+}
+
+.student-result, .student-project {
+    font-size: smaller;
+}
+/* End Mentoring */
+
+
+/* Special Stuff For Small Screens */
+@media screen and (max-width: 600px) {
+    .headshot {
+        margin: 0.2em 0.5em 0.2em 0em;
+    }
+
+    .student {
+        width: auto;
+        display: list-item;
+        list-style-type: circle;
+        margin: 0em 0em 1em 1em;
+    }
+
+    .icon, .icon-dark {
+        display: None;
+    }
+    
+    .paper {
+        display:list-item;
+        margin: 0em 0em 1em 1em;
+        list-style-type: none;
+    }
+
+    .paper-left {
+        width: 100%;
+        margin-right: 0em;
+        display: list-item;
+        list-style-type: circle;
+        list-style-position: outside;
+    }
+
+    .paper-right {
+        width: auto;
+    }
+
+    .paper-conference {
+        display:inline;
+        margin-right: 0.1em;
+    }
+    
+    a::after {
+        content: attr(alt);
+        font-size: smaller;
+    }
+}
+
+/* Set colours for light and dark mode */
+
+@media (prefers-color-scheme: light) {
+    html {
+        border-top: 7px solid #3B7EA1;
+    }
+
+    body {
+        background-color: #ffffff;
+        color: black;
+    }
+
+    .icon-dark {
+        display: None;
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: #222;
+    }
+
+    a {
+        color: #3B7EA1;
+    }
+    
+    a:hover {
+        color: #00A598;
+    }
+    
+    .hbar {
+        color: #003362;
+    }
+
+    h3 {
+        border-bottom: 1px #003362 dashed;
+    }
+    
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    html {
+        border-top: 6px solid #00A598;
+    }
+
+    body {
+        background-color: black;
+        color: #EEEEEE;
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: #EEEEEE;
+    }
+
+    a {
+        color: #00A598;
+    }
+    
+    a:hover {
+        color: #3B7EA1;
+    }
+    
+    .hbar {
+        color: #AAAAAA;
+        border-top-width: 1px;
+    }
+
+    h3 {
+        border-bottom: 1px #AAAAAA dashed;
+    }
+
+    .icon {
+        display: None;
+    }
+}
