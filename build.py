@@ -222,7 +222,8 @@ def replace_placeholders(text, map):
         newtext = newtext.replace(k+"-placeholder", map[k])
     return newtext
 
-def check(cond, msg):
+# Helper functions for sanity checks
+def require(cond, msg):
     if not cond:
         msg = f"ERROR: {msg}"
         divider = "*"*len(msg)
@@ -232,29 +233,66 @@ def check(cond, msg):
 def optional(json, field, default = ""):
     if not field in json:
         json[field] = default
-    
     return json
 
-### Load json files
+# Load json files
 with open('data/profile.json') as f:
     try:
         profile_json = json.load(f)
     except Exception as e:
-        check(False, "Failed to parse data/profile.json. Maybe check your commas and braces?")
+        require(False, "Failed to parse data/profile.json. Maybe check your commas and braces?")
 
-    check("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
-    check("blurb" in profile_json, "Must include a \"blurb\" field in data/profile.json!")
-    check("cv" in profile_json, "Must include a \"cv\" field in data/profile.json!")
-    check("email" in profile_json, "Must include a \"email\" field in data/profile.json!")
-    check("scholar" in profile_json, "Must include a \"scholar\" field in data/profile.json!")
+    require("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
+    require("blurb" in profile_json, "Must include a \"blurb\" field in data/profile.json!")
+    require("cv" in profile_json, "Must include a \"cv\" field in data/profile.json!")
+    require("email" in profile_json, "Must include a \"email\" field in data/profile.json!")
+    require("scholar" in profile_json, "Must include a \"scholar\" field in data/profile.json!")
 
-##### These next four can be empty
+with open('data/meta.json') as f:
+    try:
+        meta_json = json.load(f)
+    except Exception as e:
+        require(False, "Failed to parse data/meta.json. Maybe check your commas and braces?")
+
+    require("name" in meta_json, "Must include a \"name\" in data/meta.json!")
+    require("description" in meta_json, "Must include a \"description\" in data/meta.json!")
+    require("favicon" in meta_json, "Must include a \"favicon\" in data/meta.json!")
+    optional(meta_json, "tracker")
+
+with open('data/style.json') as f:
+    try:
+        style_json = json.load(f)
+    except Exception as e:
+        require(False, "Failed to parse data/style.json. Maybe check your commas and braces?")
+
+    require("font-color" in style_json, "Must include a \"font-color\" in data/style.json!")
+    require("background-color" in style_json, "Must include a \"background-color\" in data/style.json!")
+    require("header-color" in style_json, "Must include a \"header-color\" in data/style.json!")
+    require("accent-color" in style_json, "Must include a \"accent-color\" in data/style.json!")
+    require("link-hover-color" in style_json, "Must include a \"link-hover-color\" in data/style.json!")
+    require("divider-color" in style_json, "Must include a \"divider-color\" in data/style.json!")
+
+    require("paper-img" in style_json, "Must include a \"paper-img\" in data/style.json!")
+    require("extra-img" in style_json, "Must include a \"extra-img\" in data/style.json!")
+    require("slides-img" in style_json, "Must include a \"slides-img\" in data/style.json!")
+
+    optional(style_json, "font-color-dark", style_json["font-color"])
+    optional(style_json, "background-color-dark", style_json["background-color"])
+    optional(style_json, "header-color-dark", style_json["header-color"])
+    optional(style_json, "accent-color-dark", style_json["accent-color"])
+    optional(style_json, "link-hover-color-dark", style_json["link-hover-color"])
+    optional(style_json, "divider-color-dark", style_json["divider-color"])
+    optional(style_json, "paper-img-dark", style_json["paper-img"])
+    optional(style_json, "extra-img-dark", style_json["extra-img"])
+    optional(style_json, "slides-img-dark", style_json["slides-img"])
+
+# These next four can be empty
 try:
     with open('data/news.json') as f:
         news_json = json.load(f)
         for news in news_json:
-            check("date" in news, "Must include a \"date\" field for each news in data/news.json!")
-            check("text" in news, "Must include a \"text\" field for each news in data/news.json!")
+            require("date" in news, "Must include a \"date\" field for each news in data/news.json!")
+            require("text" in news, "Must include a \"text\" field for each news in data/news.json!")
 except Exception as e:
     print(e)
     news_json = {}
@@ -263,14 +301,14 @@ try:
     with open('data/pubs.json') as f:
         pubs_json = json.load(f)
         for pub in pubs_json:
-            check("title" in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
-            check("conference" in pub, "Must include a \"conference\" field for each pub in data/pubs.json!")
-            check("authors" in pub, "Must include a \"authors\" field for each pub in data/pubs.json!")
+            require("title" in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
+            require("conference" in pub, "Must include a \"conference\" field for each pub in data/pubs.json!")
+            require("authors" in pub, "Must include a \"authors\" field for each pub in data/pubs.json!")
             optional(pub, "link")
             optional(pub, "extra")
             optional(pub, "slides")
-            check("section" in pub, "Must include a \"section\" field for each pub in data/pubs.json!")
-            check("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
+            require("section" in pub, "Must include a \"section\" field for each pub in data/pubs.json!")
+            require("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
 except Exception as e:
     print(e)
     pubs_json = {}
@@ -279,9 +317,9 @@ try:
     with open('data/students.json') as f:
         students_json = json.load(f)
         for student in students_json:
-            check("name" in student, "Must include a \"name\" field for each student in data/students.json!")
-            check("project" in student, "Must include a \"project\" field for each student in data/students.json!")
-            check("result" in student, "Must include a \"result\" field for each student in data/students.json!")
+            require("name" in student, "Must include a \"name\" field for each student in data/students.json!")
+            require("project" in student, "Must include a \"project\" field for each student in data/students.json!")
+            require("result" in student, "Must include a \"result\" field for each student in data/students.json!")
 
 except Exception as e:
     print(e)
@@ -294,45 +332,8 @@ except Exception as e:
     print(e)
     auto_links_json = {}
 
-with open('data/meta.json') as f:
-    try:
-        meta_json = json.load(f)
-    except Exception as e:
-        check(False, "Failed to parse data/meta.json. Maybe check your commas and braces?")
 
-    check("name" in meta_json, "Must include a \"name\" in data/meta.json!")
-    check("description" in meta_json, "Must include a \"description\" in data/meta.json!")
-    check("favicon" in meta_json, "Must include a \"favicon\" in data/meta.json!")
-    optional(meta_json, "tracker")
-
-
-with open('data/style.json') as f:
-    try:
-        style_json = json.load(f)
-    except Exception as e:
-        check(False, "Failed to parse data/style.json. Maybe check your commas and braces?")
-
-    check("font-color" in style_json, "Must include a \"font-color\" in data/style.json!")
-    check("background-color" in style_json, "Must include a \"background-color\" in data/style.json!")
-    check("header-color" in style_json, "Must include a \"header-color\" in data/style.json!")
-    check("accent-color" in style_json, "Must include a \"accent-color\" in data/style.json!")
-    check("link-hover-color" in style_json, "Must include a \"link-hover-color\" in data/style.json!")
-    check("divider-color" in style_json, "Must include a \"divider-color\" in data/style.json!")
-
-    check("paper-img" in style_json, "Must include a \"paper-img\" in data/style.json!")
-    check("extra-img" in style_json, "Must include a \"extra-img\" in data/style.json!")
-    check("slides-img" in style_json, "Must include a \"slides-img\" in data/style.json!")
-
-    optional(style_json, "font-color-dark", style_json["font-color"])
-    optional(style_json, "background-color-dark", style_json["background-color"])
-    optional(style_json, "header-color-dark", style_json["header-color"])
-    optional(style_json, "accent-color-dark", style_json["accent-color"])
-    optional(style_json, "link-hover-color-dark", style_json["link-hover-color"])
-    optional(style_json, "divider-color-dark", style_json["divider-color"])
-    optional(style_json, "paper-img-dark", style_json["paper-img"])
-    optional(style_json, "extra-img-dark", style_json["extra-img"])
-    optional(style_json, "slides-img-dark", style_json["slides-img"])
-
+# Load templates
 with open('templates/main.css') as f:
     main_css = f.read()
 
@@ -342,7 +343,7 @@ with open('templates/header.html') as f:
 with open('templates/footer.html') as f:
     footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else ""
 
-### Create HTML and CSS
+# Create HTML and CSS
 header_html = replace_placeholders(header_html, meta_json)
 footer_html = replace_placeholders(footer_html, meta_json)
 main_css    = replace_placeholders(main_css, style_json)
@@ -363,8 +364,8 @@ with open('docs/pubs.html', 'w') as index:
 with open('docs/main.css', 'w') as main:
     main.write(main_css)
 
-
-msg = f"Success! Open docs/index.html in your browser to see your website!"
+# Got to here means everything went well
+msg = "Success! Open docs/index.html in your browser to see your website!"
 divider = "*"*len(msg)
 print(f"\n{divider}\n{msg}\n{divider}\n")
 exit(0)
