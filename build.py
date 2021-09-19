@@ -341,7 +341,11 @@ with open('templates/header.html') as f:
     header_html = f.read()
 
 with open('templates/footer.html') as f:
-    footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else ""
+    footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else """
+<div class="footer">
+    <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
+</div>
+"""
 
 # Create HTML and CSS
 header_html = replace_placeholders(header_html, meta_json)

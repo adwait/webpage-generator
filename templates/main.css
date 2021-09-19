@@ -26,11 +26,11 @@ small {
     font-size: xx-small;
     text-align: right;
     padding-top: 5%;
-    color: gray;
+    color: #AAAAAA;
 }
 
 .footer a {
-    color: gray;
+    color: #AAAAAA;
     font-weight: 700;
 }
 
