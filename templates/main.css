@@ -1,35 +1,51 @@
 body {
     font: 18px/1.5 Helvetica, Arial, sans-serif;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 800px;
-    min-width: 350px;
-    width: 90%;
-    margin-top: 1%;
-    margin-bottom: 1%;
     line-height: 1.3;
+    min-height: 100vh;
     text-size-adjust: none;
     -webkit-text-size-adjust: none;
     -moz-text-size-adjust: none;
     -ms-text-size-adjust: none;
 }
 
-p {
-    margin-top: 1em;
+.content {
+    min-height: calc(100vh - 4em);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    min-width: 350px;
+    width: 90%;
 }
 
-small {
-    font-size: 85%;
+header {
+    margin-left: auto;
+    margin-right: auto;
+    position: sticky;
+    top: 0;
+    height: 0.4em;
 }
 
-.footer {
+#scroller {
+    height: 0.4em;
+    width: 0%;
+    position: absolute;
+    left: 0;
+}
+
+footer {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    min-width: 350px;
+    width: 90%;
     font-size: xx-small;
     text-align: right;
-    padding-top: 5%;
+    padding-top: 2em;
+    padding-bottom: 1em;
     color: #AAAAAA;
 }
 
-.footer a {
+footer a {
     color: #AAAAAA;
     font-weight: 700;
 }
@@ -39,17 +55,26 @@ h2,
 h3 {
     font-weight: 700;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-bottom: 0.25em;
-    margin-top: 1em;
     font-size: larger;
+}
+
+h1 {
+    padding-top: 2em;
 }
 
 h3 {
     font-weight: 500;
     font-size: medium;
     display: inline-block;
-    margin-top: 0;
-    margin-bottom: 1em;
+    padding-top: 1em;
+}
+
+p {
+    padding-top: 1em;
+}
+
+small {
+    font-size: 85%;
 }
 
 a {
@@ -59,46 +84,47 @@ a {
 .hbar {
     margin-left: auto;
     margin-right: auto;
-    border-top: solid;
-    border-top-width: 2px;
-    margin-bottom: 1em;
+    border-bottom: solid;
+    border-bottom-width: 2px;
+    padding-top: 0.25em;
 }
 
 .section {
-    margin: 2.5em 0em 0em 0em;
     font-size: smaller;
 }
 
 /* Start Profile */
 .headshot {
-    margin: 0.3em 3.5% 0.2em 0em;
+    padding-top: 1.25em;
+    padding-right: 1em;
+    padding-bottom: 0em;
     width: 36%;
-    max-width: 240px;
+    max-width: 235px;
     float: left;
-    border-radius: 2px;
 }
 
-.profile {
-    margin: 0em 0em 0em 0em;
-}
 /* End Profile */
 
 /* Start News and Pubs */
 .paper {
     display: flex;
-    margin: 0em 0em 1em 0em;
+    padding-top: 1em;
+}
+
+#news {
+    padding-top: 0.25em;
 }
 
 .news-item {
     display: flex;
-    margin: 0.5em 0em 0em 0em;
+    padding-top: 0.5em;
     font-size: smaller;
 }
 
 .paper-left, .news-left {
     float: left;
     width: 10%;
-    margin-right: 20px;
+    padding-right: 20px;
     text-decoration: none;
 }
 
@@ -109,8 +135,8 @@ a {
 
 .icon, .icon-dark {
     width: 20%;
-    margin-top: 0.25em;
-    margin-right: 0.25em;
+    padding-top: 0.25em;
+    padding-right: 0.25em;
 }
 
 .paper-conference {
@@ -123,6 +149,20 @@ a {
 
 /* End News and Pubs */
 
+/* Start Mentoring */
+.student {
+    float: left;
+    width: 47%;
+    padding-top: 1em;
+    padding-right: 1em;
+}
+
+.student-result, .student-project {
+    font-size: smaller;
+}
+/* End Mentoring */
+
+/* Extra stuff for both pubs and students */
 .paper:before,
 .paper:after,
 #students:before,
@@ -134,30 +174,13 @@ a {
   clear: both;
 }
 
-/* Start Mentoring */
-.student {
-    margin: 0em 3% 1em 0em;
-    float: left;
-    width: 47%;
-}
-
-.student-result, .student-project {
-    font-size: smaller;
-}
-/* End Mentoring */
-
-
 /* Special Stuff For Small Screens */
 @media screen and (max-width: 600px) {
-    .headshot {
-        margin: 0.2em 0.5em 0.2em 0em;
-    }
-
     .student {
         width: auto;
         display: list-item;
         list-style-type: circle;
-        margin: 0em 0em 1em 1em;
+        margin-left: 1em;
     }
 
     .icon, .icon-dark {
@@ -166,13 +189,13 @@ a {
     
     .paper {
         display:list-item;
-        margin: 0em 0em 1em 1em;
         list-style-type: none;
+        padding-left: 1em;
     }
 
     .paper-left {
         width: 100%;
-        margin-right: 0em;
+        padding-right: 0em;
         display: list-item;
         list-style-type: circle;
         list-style-position: outside;
@@ -184,7 +207,7 @@ a {
 
     .paper-conference {
         display:inline;
-        margin-right: 0.1em;
+        padding-right: 0.1em;
     }
     
     a::after {
@@ -196,8 +219,12 @@ a {
 /* Set colours for light and dark mode */
 
 @media (prefers-color-scheme: light) {
-    html {
-        border-top: 7px solid accent-color-placeholder;
+    header {
+        background-color: accent-color-placeholder;
+    }
+
+    #scroller {
+        background-color: link-hover-color-placeholder;
     }
 
     body {
@@ -235,8 +262,12 @@ a {
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
-    html {
-        border-top: 6px solid accent-color-dark-placeholder;
+    header {
+        background-color: accent-color-dark-placeholder;
+    }
+
+    #scroller {
+        background-color: link-hover-color-dark-placeholder;
     }
 
     body {
@@ -260,7 +291,7 @@ a {
     
     .hbar {
         color: divider-color-dark-placeholder;
-        border-top-width: 1px;
+        border-bottom-width: 1px;
     }
 
     h3 {

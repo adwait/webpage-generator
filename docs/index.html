@@ -13,6 +13,8 @@
 </head>
 
 <body>
+<header><div id="scroller"></div></header>
+<div class="content">
 <div class="profile">
 <div class="profile-left">
 <img class="headshot" src="images/federico.JPG" alt="Headshot"/>
@@ -21,9 +23,13 @@
 </div>
 </div>
 <div class="section">
-<h1>Recent News <small style="font-weight: 300; float: right; margin-top: 0.23em">(<a href="./news.html">See all news</a>)</small></h1>
+<h1>Recent News <small style="font-weight: 300; float: right; margin-top: 0.23em">(<a href="./news.html">See all posts</a>)</small></h1>
 <div class="hbar"></div>
 <div id="news">
+<div class="news-item">
+<div class="news-left">11/2021</div>
+<div class="news-right"><a href="https://youtu.be/9V11e-ONuwM">I presented</a> our paper on Z3str4 at <a href="https://lcs.ios.ac.cn/fm2021/">FM '21</a></div>
+</div>
 <div class="news-item">
 <div class="news-left">09/2020</div>
 <div class="news-right"><a href="https://youtu.be/1TYTNXaI6PM?t=8238">Murad presented</a> our paper on verification by gambling on program slices at <a href="https://formal-analysis.com/atva/2021/">ATVA '21</a></div>
@@ -40,10 +46,6 @@
 <div class="news-left">07/2021</div>
 <div class="news-right"><a href="https://ucl-pplv.github.io/CAV21/poster_P_220/">Murphy presented</a> our paper on regular expression and length constraint solving at <a href="http://i-cav.org/2021/">CAV '21</a></div>
 </div>
-<div class="news-item">
-<div class="news-left">09/2020</div>
-<div class="news-right"><a href="https://www.youtube.com/watch?v=gsHGPcxQeNw">Nick presented</a> our paper on scaling client-specific equivalence checking at <a href="https://conf.researchr.org/home/ase-2020">ASE '20</a></div>
-</div>
 </div>
 </div>
 <div class="section">
@@ -54,6 +56,7 @@
 <div class="paper-conference"><a href="https://lcs.ios.ac.cn/fm2021/">FM '21</a></div>
 <a href="https://people.eecs.berkeley.edu/~fmora/fm21a.pdf" alt="[PDF]"><img class="icon" src="images/paper.png"/><img class="icon-dark" src="images/paper-dark.png"/></a>
 <a href="https://z3str4.github.io/" alt="[Extra]"><img class="icon" src="images/extra.png"/><img class="icon-dark" src="images/extra-dark.png"/></a>
+<a href="https://people.eecs.berkeley.edu/~fmora/fm21a_presentation.pdf" alt="[Slides]"><img class="icon" src="images/slides.png"/><img class="icon-dark" src="images/slides-dark.png"/></a>
 </div>
 <div class="paper-right">
 <div class="paper-title">Z3str4: A Multi-armed String Solver</div>
@@ -111,7 +114,6 @@ and <a href="https://ece.uwaterloo.ca/~vganesh/">V. Ganesh</a></div>
 and <a href="http://www.cs.toronto.edu/~chechik/">M. Chechik</a></div>
 </div>
 </div>
-<p style="font-size: 0.7em">&nbsp</p>
 <h3 id="Refereed Workshop, Short & Tool Paperspublications">Refereed Workshop, Short & Tool Papers</h3><div class="paper">
 <div class="paper-left">
 <div class="paper-conference"><a href="http://pl.cs.uchicago.edu/synt2020/">SYNT '20</a></div>
@@ -162,9 +164,18 @@ and <a href="https://ece.uwaterloo.ca/~vganesh/">V. Ganesh</a></div>
 </div>
 </div>
 </div>
-
-<div class="footer">
-    <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
 </div>
-</body>
+
+<footer>
+    <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
+</footer>
+<script>
+window.onscroll = function() {scroller()};
+function scroller() {
+  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var scrolled = (winScroll / height) * 100;
+  document.getElementById("scroller").style.width = scrolled + "%";
+}
+</script></body>
 </html>
