@@ -2,6 +2,7 @@
 
 import json
 import inspect
+import subprocess
 
 # Define functions for pieces
 def build_news(news, count, standalone):
@@ -15,7 +16,7 @@ def build_news(news, count, standalone):
     news_list = ""
 
     for n in news[:count]:
-        print(n["date"])
+        print("- " + n["date"])
         item  = '<div class="news-item">\n'
         item += '<div class="news-left">'  + n["date"] + '</div>\n'
         item += '<div class="news-right">' + n["text"] + '</div>\n'
@@ -64,7 +65,7 @@ def build_pubs_inner(pubs, title, full):
 
     for p in pubs:
         if title == p["section"] and (p["selected"] or full):
-            print(p["title"])
+            print("- " + p["title"])
             item  = '<div class="paper">\n'
             item += '<div class="paper-left">\n'
             item += '<div class="paper-conference">' + p["conference"] + '</div>\n'
@@ -122,7 +123,7 @@ def build_students(students):
     students_list = ""
 
     for p in students:
-        print(p["name"])
+        print("- " + p["name"])
         item  = '<div class="student">\n' + p["name"] + "\n"
         item += '<div class="student-project">' + p["project"] + '</div>\n'
         item += '<div class="student-result">' + p["result"] + '</div>\n'
@@ -168,7 +169,7 @@ def add_links(html, links):
             open  = html[:pos].count("<a href=")
             close = html[:pos].count("</a>")
 
-            print(name, pos, open, close)
+            print("- " + name, pos, open, close)
             if pos >= 0 and open == close:
                 toreplace = "<a href=\"%s\">%s</a>" % (links[name], name)
                 suffix    = suffix.replace(name, toreplace, 1)
@@ -190,7 +191,6 @@ def build_index(profile_json, news_json, pubs_json, students_json, links):
     body_html += build_students(students_json)
     body_html += "</div>\n"
     body_html += footer_html
-    body_html += scroll_js
     body_html += "</body>\n"
 
     index_html  = "<!DOCTYPE html>\n"
@@ -208,7 +208,6 @@ def build_news_site(news_json, links):
     body_html += build_news(news_json, len(news_json), True)
     body_html += "</div>\n"
     body_html += footer_html
-    body_html += scroll_js
     body_html += "</body>\n"
 
     news_html  = "<!DOCTYPE html>\n"
@@ -226,7 +225,6 @@ def build_pubs_site(pubs_json, links):
     body_html += build_pubs(pubs_json, True)
     body_html += "</div>\n"
     body_html += footer_html
-    body_html += scroll_js
     body_html += "</body>\n"
 
     pubs_html  = "<!DOCTYPE html>\n"
@@ -259,20 +257,23 @@ def optional(json, field, default = ""):
 
     return json
 
-# Load json files
-with open('data/profile.json') as f:
-    try:
-        profile_json = json.load(f)
-    except Exception as e:
-        require(False, "Failed to parse data/profile.json. Maybe check your commas and braces?")
+def check_tracker():
+    repo_url = subprocess.getoutput("git config --get remote.origin.url").split()[0]
+    my_url   = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
+    tracker  = meta_json["tracker"]
 
-    require("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
-    require("blurb"    in profile_json, "Must include a \"blurb\" field in data/profile.json!")
-    require("cv"       in profile_json, "Must include a \"cv\" field in data/profile.json!")
-    require("email"    in profile_json, "Must include a \"email\" field in data/profile.json!")
-    require("scholar"  in profile_json, "Must include a \"scholar\" field in data/profile.json!")
+    print("- Sanity check on tracker script:")
+    print(f"- - remote.origin.url: {repo_url}")
+    print(f"- - tracker: {tracker}")
+
+    not_mine_implies_not_my_tracker = repo_url == my_url or "federicoaureliano" not in tracker
+    require(not_mine_implies_not_my_tracker, "Please use your own hit counter in data/meta.json")
+
+# Load json files
+print("\nLoading json files:")
 
 with open('data/meta.json') as f:
+    print("- data/meta.json")
     try:
         meta_json = json.load(f)
     except Exception as e:
@@ -281,9 +282,12 @@ with open('data/meta.json') as f:
     require("name"        in meta_json, "Must include a \"name\" in data/meta.json!")
     require("description" in meta_json, "Must include a \"description\" in data/meta.json!")
     require("favicon"     in meta_json, "Must include a \"favicon\" in data/meta.json!")
+
     optional(meta_json, "tracker")
+    check_tracker()
 
 with open('data/style.json') as f:
+    print("- data/style.json")
     try:
         style_json = json.load(f)
     except Exception as e:
@@ -310,9 +314,23 @@ with open('data/style.json') as f:
     optional(style_json, "extra-img-dark",        style_json["extra-img"])
     optional(style_json, "slides-img-dark",       style_json["slides-img"])
 
+with open('data/profile.json') as f:
+    print("- data/profile.json")
+    try:
+        profile_json = json.load(f)
+    except Exception as e:
+        require(False, "Failed to parse data/profile.json. Maybe check your commas and braces?")
+
+    require("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
+    require("blurb"    in profile_json, "Must include a \"blurb\" field in data/profile.json!")
+    require("cv"       in profile_json, "Must include a \"cv\" field in data/profile.json!")
+    require("email"    in profile_json, "Must include a \"email\" field in data/profile.json!")
+    require("scholar"  in profile_json, "Must include a \"scholar\" field in data/profile.json!")
+
 # These next four can be empty
 try:
     with open('data/news.json') as f:
+        print("- data/news.json")
         news_json = json.load(f)
         for news in news_json:
             require("date" in news, "Must include a \"date\" field for each news in data/news.json!")
@@ -323,6 +341,7 @@ except Exception as e:
 
 try:
     with open('data/pubs.json') as f:
+        print("- data/pubs.json")
         pubs_json = json.load(f)
         for pub in pubs_json:
             require("title"      in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
@@ -342,6 +361,7 @@ except Exception as e:
 
 try:
     with open('data/students.json') as f:
+        print("- data/students.json")
         students_json = json.load(f)
         for student in students_json:
             require("name"    in student, "Must include a \"name\" field for each student in data/students.json!")
@@ -354,35 +374,30 @@ except Exception as e:
 
 try:
     with open('data/auto_links.json') as f:
+        print("- data/auto_links.json")
         auto_links_json = json.load(f)
 except Exception as e:
     print(e)
     auto_links_json = {}
 
-
 # Load templates
+print("\nLoading template files:")
+
 with open('templates/main.css') as f:
+    print("- templates/main.css")
     main_css = f.read()
 
 with open('templates/head.html') as f:
+    print("- templates/head.html")
     head_html = f.read()
 
 with open('templates/footer.html') as f:
+    print("- templates/footer.html")
     footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else """
 <footer>
     <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
 </footer>
 """
-
-scroll_js = """<script>
-window.onscroll = function() {scroller()};
-function scroller() {
-  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  var scrolled = (winScroll / height) * 100;
-  document.getElementById("scroller").style.width = scrolled + "%";
-}
-</script>"""
 
 # Create HTML and CSS
 head_html   = replace_placeholders(head_html, meta_json)
@@ -393,16 +408,22 @@ news_site   = build_news_site(news_json, auto_links_json)
 pubs_site   = build_pubs_site(pubs_json, auto_links_json)
 
 # Write to files
+print("\nWriting website:")
+
 with open('docs/index.html', 'w') as index:
+    print("- docs/index.html")
     index.write(index_html)
 
 with open('docs/news.html', 'w') as index:
+    print("- docs/news.html")
     index.write(news_site)
 
 with open('docs/pubs.html', 'w') as index:
+    print("- docs/pubs.html")
     index.write(pubs_site)
 
 with open('docs/main.css', 'w') as main:
+    print("- docs/main.css")
     main.write(main_css)
 
 # Got to here means everything went well

@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="reset.css">
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
+    <script src="scroller.js"></script> 
     <script data-goatcounter="https://federicoaureliano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 
@@ -74,13 +75,5 @@
 <footer>
     <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
 </footer>
-<script>
-window.onscroll = function() {scroller()};
-function scroller() {
-  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  var scrolled = (winScroll / height) * 100;
-  document.getElementById("scroller").style.width = scrolled + "%";
-}
-</script></body>
+</body>
 </html>
