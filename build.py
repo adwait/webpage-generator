@@ -1,10 +1,19 @@
 #!python3
 
+import sys
 import json
 import inspect
 import subprocess
 
-# Define functions for pieces
+from datetime import datetime
+
+VERBOSITY = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+
+def debug(msg, priority = 1):
+    if priority <= VERBOSITY:
+        print(msg)
+
+# Define functions for website pieces
 def build_news(news, count, standalone):
     if count > len(news):
         count = len(news)
@@ -12,11 +21,11 @@ def build_news(news, count, standalone):
     if count <= 0:
         return ""
     
-    print("\nAdding news:")
+    debug("\nAdding news:")
     news_list = ""
 
     for n in news[:count]:
-        print("- " + n["date"])
+        debug("- " + n["date"])
         item  = '<div class="news-item">\n'
         item += '<div class="news-left">'  + n["date"] + '</div>\n'
         item += '<div class="news-right">' + n["text"] + '</div>\n'
@@ -65,7 +74,7 @@ def build_pubs_inner(pubs, title, full):
 
     for p in pubs:
         if title == p["section"] and (p["selected"] or full):
-            print("- " + p["title"])
+            debug("- " + p["title"])
             item  = '<div class="paper">\n'
             item += '<div class="paper-left">\n'
             item += '<div class="paper-conference">' + p["conference"] + '</div>\n'
@@ -89,7 +98,7 @@ def build_pubs(pubs, full):
     if len(pubs) == 0:
         return ""
 
-    print("\nAdding publications:")
+    debug("\nAdding publications:")
 
     pubs_html =  "<div class=\"section\">\n"
 
@@ -119,11 +128,11 @@ def build_students(students):
     if len(students) == 0:
         return ""
 
-    print("\nAdding students:")
+    debug("\nAdding students:")
     students_list = ""
 
     for p in students:
-        print("- " + p["name"])
+        debug("- " + p["name"])
         item  = '<div class="student">\n' + p["name"] + "\n"
         item += '<div class="student-project">' + p["project"] + '</div>\n'
         item += '<div class="student-result">' + p["result"] + '</div>\n'
@@ -156,7 +165,7 @@ def build_profile(profile):
     return profile_html
 
 def add_links(html, links):
-    print("\nAdding links:")
+    debug("\nAdding links:", 2)
 
     toreplace = sorted(links.keys(), key=len, reverse=True)
 
@@ -169,7 +178,7 @@ def add_links(html, links):
             open  = html[:pos].count("<a href=")
             close = html[:pos].count("</a>")
 
-            print("- " + name, pos, open, close)
+            debug(f"- {name} {pos} {open} {close}", 2)
             if pos >= 0 and open == close:
                 toreplace = "<a href=\"%s\">%s</a>" % (links[name], name)
                 suffix    = suffix.replace(name, toreplace, 1)
@@ -248,8 +257,14 @@ def require(cond, msg):
     if not cond:
         msg     = f"ERROR: {msg}"
         divider = "*"*len(msg)
-        print(f"\n{divider}\n{msg}\n{divider}\n")
-        exit(0)
+        debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
+        exit(1)
+
+def warning(cond, msg):
+    if not cond:
+        msg     = f"WARNING: {msg}"
+        divider = "*"*len(msg)
+        debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
 
 def optional(json, field, default = ""):
     if not field in json:
@@ -262,18 +277,18 @@ def check_tracker():
     my_url   = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
     tracker  = meta_json["tracker"]
 
-    print("- Sanity check on tracker script:")
-    print(f"- - remote.origin.url: {repo_url}")
-    print(f"- - tracker: {tracker}")
+    debug("- Sanity check on tracker script:")
+    debug(f"- - remote.origin.url: {repo_url}")
+    debug(f"- - tracker: {tracker}")
 
     not_mine_implies_not_my_tracker = repo_url == my_url or "federicoaureliano" not in tracker
     require(not_mine_implies_not_my_tracker, "Please use your own hit counter in data/meta.json")
 
 # Load json files
-print("\nLoading json files:")
+debug("\nLoading json files:")
 
 with open('data/meta.json') as f:
-    print("- data/meta.json")
+    debug("- data/meta.json")
     try:
         meta_json = json.load(f)
     except Exception as e:
@@ -287,7 +302,7 @@ with open('data/meta.json') as f:
     check_tracker()
 
 with open('data/style.json') as f:
-    print("- data/style.json")
+    debug("- data/style.json")
     try:
         style_json = json.load(f)
     except Exception as e:
@@ -315,7 +330,7 @@ with open('data/style.json') as f:
     optional(style_json, "slides-img-dark",       style_json["slides-img"])
 
 with open('data/profile.json') as f:
-    print("- data/profile.json")
+    debug("- data/profile.json")
     try:
         profile_json = json.load(f)
     except Exception as e:
@@ -330,18 +345,22 @@ with open('data/profile.json') as f:
 # These next four can be empty
 try:
     with open('data/news.json') as f:
-        print("- data/news.json")
+        debug("- data/news.json")
         news_json = json.load(f)
         for news in news_json:
             require("date" in news, "Must include a \"date\" field for each news in data/news.json!")
             require("text" in news, "Must include a \"text\" field for each news in data/news.json!")
+
+        dates = [datetime.strptime(n["date"], '%m/%Y') for n in news_json]
+        warning(dates == sorted(dates, reverse=True), "The dates in data/news.json are not in order.")
+        
 except Exception as e:
-    print(e)
+    debug(e)
     news_json = {}
 
 try:
     with open('data/pubs.json') as f:
-        print("- data/pubs.json")
+        debug("- data/pubs.json")
         pubs_json = json.load(f)
         for pub in pubs_json:
             require("title"      in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
@@ -356,12 +375,12 @@ try:
             require("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
 
 except Exception as e:
-    print(e)
+    debug(e)
     pubs_json = {}
 
 try:
     with open('data/students.json') as f:
-        print("- data/students.json")
+        debug("- data/students.json")
         students_json = json.load(f)
         for student in students_json:
             require("name"    in student, "Must include a \"name\" field for each student in data/students.json!")
@@ -369,30 +388,30 @@ try:
             require("result"  in student, "Must include a \"result\" field for each student in data/students.json!")
 
 except Exception as e:
-    print(e)
+    debug(e)
     students_json = {}
 
 try:
     with open('data/auto_links.json') as f:
-        print("- data/auto_links.json")
+        debug("- data/auto_links.json")
         auto_links_json = json.load(f)
 except Exception as e:
-    print(e)
+    debug(e)
     auto_links_json = {}
 
 # Load templates
-print("\nLoading template files:")
+debug("\nLoading template files:")
 
 with open('templates/main.css') as f:
-    print("- templates/main.css")
+    debug("- templates/main.css")
     main_css = f.read()
 
 with open('templates/head.html') as f:
-    print("- templates/head.html")
+    debug("- templates/head.html")
     head_html = f.read()
 
 with open('templates/footer.html') as f:
-    print("- templates/footer.html")
+    debug("- templates/footer.html")
     footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else """
 <footer>
     <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
@@ -408,26 +427,26 @@ news_site   = build_news_site(news_json, auto_links_json)
 pubs_site   = build_pubs_site(pubs_json, auto_links_json)
 
 # Write to files
-print("\nWriting website:")
+debug("\nWriting website:")
 
 with open('docs/index.html', 'w') as index:
-    print("- docs/index.html")
+    debug("- docs/index.html")
     index.write(index_html)
 
 with open('docs/news.html', 'w') as index:
-    print("- docs/news.html")
+    debug("- docs/news.html")
     index.write(news_site)
 
 with open('docs/pubs.html', 'w') as index:
-    print("- docs/pubs.html")
+    debug("- docs/pubs.html")
     index.write(pubs_site)
 
 with open('docs/main.css', 'w') as main:
-    print("- docs/main.css")
+    debug("- docs/main.css")
     main.write(main_css)
 
 # Got to here means everything went well
 msg     = "Success! Open docs/index.html in your browser to see your website!"
 divider = "*"*len(msg)
-print(f"\n{divider}\n{msg}\n{divider}\n")
+debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
 exit(0)
