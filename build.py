@@ -355,7 +355,7 @@ try:
         warning(dates == sorted(dates, reverse=True), "The dates in data/news.json are not in order.")
         
 except Exception as e:
-    debug(e)
+    debug(e, 0)
     news_json = {}
 
 try:
@@ -375,7 +375,7 @@ try:
             require("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
 
 except Exception as e:
-    debug(e)
+    debug(e, 0)
     pubs_json = {}
 
 try:
@@ -388,7 +388,7 @@ try:
             require("result"  in student, "Must include a \"result\" field for each student in data/students.json!")
 
 except Exception as e:
-    debug(e)
+    debug(e, 0)
     students_json = {}
 
 try:
@@ -396,7 +396,7 @@ try:
         debug("- data/auto_links.json")
         auto_links_json = json.load(f)
 except Exception as e:
-    debug(e)
+    debug(e, 0)
     auto_links_json = {}
 
 # Load templates
