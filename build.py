@@ -9,9 +9,119 @@ from datetime import datetime
 
 VERBOSITY = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 
-def debug(msg, priority = 1):
+# for printing with colours
+class bcolors:
+    SUCCESS = '\033[92m'
+    OKCYAN  = '\033[96m'
+    OKBLUE  = '\033[94m'
+    WARNING = '\033[93m'
+    ERROR   = '\033[91m'
+    BOLD    = '\033[1m'
+    ENDC    = '\033[0m'
+
+# Helper functions
+def status(msg, priority = 1):
     if priority <= VERBOSITY:
-        print(msg)
+        if priority == 0:
+            divider = "*"*len(msg)
+            msg     = f"{divider}\n{msg}\n{divider}"
+            print(f"{bcolors.BOLD}{bcolors.OKBLUE}{msg}{bcolors.ENDC*2}")
+        elif priority == 1:
+            print(f"{bcolors.BOLD}{bcolors.OKCYAN}{msg}{bcolors.ENDC*2}")
+        else:
+            print(f"{bcolors.OKCYAN}{msg}{bcolors.ENDC}")
+
+def success(msg):
+    msg     = f"SUCCESS: {msg}"
+    divider = "*"*len(msg)
+    msg     = f"{divider}\n{msg}\n{divider}"
+
+    print(f"{bcolors.SUCCESS}{msg}{bcolors.ENDC}")
+
+def warning(msg):
+    msg     = f"WARNING: {msg}"
+    divider = "*"*len(msg)
+    msg     = f"{divider}\n{msg}\n{divider}"
+
+    print(f"{bcolors.WARNING}{msg}{bcolors.ENDC}")
+
+def error(msg):
+    msg     = f"ERROR: {msg}"
+    divider = "*"*len(msg)
+    msg     = f"{divider}\n{msg}\n{divider}"
+
+    print(f"{bcolors.ERROR}{msg}{bcolors.ENDC}")
+    exit(1)
+
+def warn_if_not(cond, msg):
+    if not cond:
+        warning(msg)
+
+def fail_if_not(cond, msg):
+    if not cond:
+        error(msg)
+
+def fill_if_missing(json, field, default = ""):
+    if not field in json:
+        json[field] = default
+
+    return json
+
+def is_federicos():
+    repo_url        = subprocess.getoutput("git config --get remote.origin.url").split()[0]
+    federicos_url   = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
+    name            = meta_json["name"]
+    federicos_name  = "Federico Mora Rocha"
+    
+    return name == federicos_name and repo_url == federicos_url
+
+def check_tracker():
+    tracker = meta_json["tracker"]
+
+    status("- Sanity check on tracker script:")
+
+    not_mine_implies_not_my_tracker = is_federicos() or "federicoaureliano" not in tracker
+    fail_if_not(not_mine_implies_not_my_tracker, "Please use your own tracker in data/meta.json")
+
+
+def read_data(json_file_name, optional):
+    try:
+        with open(json_file_name) as f:
+            status(f"- loading {json_file_name}")
+            data = json.load(f)
+    except Exception as e:
+        fail_if_not(optional, f"Failed to parse {json_file_name}. Check your commas, braces, and if the file exists.")
+        # fail_if_not will exit if needed so the code below will only run if this data is optional
+        status(f"Failed to load {json_file_name}---treating it as empty.", 0)
+        data = {}
+    
+    return data
+
+def read_template(template_file_name, optional):
+    with open(template_file_name) as f:
+        status(f"- loading {template_file_name}")
+        try:
+            data = f.read()
+        except Exception as e:
+            fail_if_not(optional, f"Failed to read {template_file_name}. Does it exist?")
+            # fail_if_not will exit if needed
+            status(f"Couldn't load {template_file_name}---treating it as empty.", 0)
+            data = {}
+    
+    return data
+
+def write_file(file_name, contents):
+    with open(file_name, 'w') as target:
+        status(f"- writing {file_name}")
+        target.write(contents)
+
+def replace_placeholders(text, map):
+    newtext = text
+
+    for k in map:
+        newtext = newtext.replace(k+"-placeholder", map[k])
+
+    return newtext
 
 # Define functions for website pieces
 def build_news(news, count, standalone):
@@ -21,11 +131,11 @@ def build_news(news, count, standalone):
     if count <= 0:
         return ""
     
-    debug("\nAdding news:")
+    status("\nAdding news:")
     news_list = ""
 
     for n in news[:count]:
-        debug("- " + n["date"])
+        status("- " + n["date"])
         item  = '<div class="news-item">\n'
         item += '<div class="news-left">'  + n["date"] + '</div>\n'
         item += '<div class="news-right">' + n["text"] + '</div>\n'
@@ -74,7 +184,7 @@ def build_pubs_inner(pubs, title, full):
 
     for p in pubs:
         if title == p["section"] and (p["selected"] or full):
-            debug("- " + p["title"])
+            status("- " + p["title"])
             item  = '<div class="paper">\n'
             item += '<div class="paper-left">\n'
             item += '<div class="paper-conference">' + p["conference"] + '</div>\n'
@@ -98,7 +208,7 @@ def build_pubs(pubs, full):
     if len(pubs) == 0:
         return ""
 
-    debug("\nAdding publications:")
+    status("\nAdding publications:")
 
     pubs_html =  "<div class=\"section\">\n"
 
@@ -128,11 +238,11 @@ def build_students(students):
     if len(students) == 0:
         return ""
 
-    debug("\nAdding students:")
+    status("\nAdding students:")
     students_list = ""
 
     for p in students:
-        debug("- " + p["name"])
+        status("- " + p["name"])
         item  = '<div class="student">\n' + p["name"] + "\n"
         item += '<div class="student-project">' + p["project"] + '</div>\n'
         item += '<div class="student-result">' + p["result"] + '</div>\n'
@@ -165,7 +275,7 @@ def build_profile(profile):
     return profile_html
 
 def add_links(html, links):
-    debug("\nAdding links:", 2)
+    status("\nAdding links:", 2)
 
     toreplace = sorted(links.keys(), key=len, reverse=True)
 
@@ -178,7 +288,7 @@ def add_links(html, links):
             open  = html[:pos].count("<a href=")
             close = html[:pos].count("</a>")
 
-            debug(f"- {name} {pos} {open} {close}", 2)
+            status(f"- {name} {pos} {open} {close}", 2)
             if pos >= 0 and open == close:
                 toreplace = "<a href=\"%s\">%s</a>" % (links[name], name)
                 suffix    = suffix.replace(name, toreplace, 1)
@@ -202,15 +312,15 @@ def build_index(profile_json, news_json, pubs_json, students_json, links):
     body_html += footer_html
     body_html += "</body>\n"
 
-    index_html  = "<!DOCTYPE html>\n"
-    index_html += "<html lang=\"en\">\n"
-    index_html += head_html + "\n\n"
-    index_html += body_html
-    index_html += "</html>\n"
+    index_page  = "<!DOCTYPE html>\n"
+    index_page += "<html lang=\"en\">\n"
+    index_page += head_html + "\n\n"
+    index_page += body_html
+    index_page += "</html>\n"
 
-    return inspect.cleandoc(add_links(index_html, links))
+    return inspect.cleandoc(add_links(index_page, links))
 
-def build_news_site(news_json, links):
+def build_news_page(news_json, links):
     body_html  = "<body>\n"
     body_html += "<header><div id=\"scroller\"></div></header>\n"
     body_html += "<div class=\"content\">\n"
@@ -227,7 +337,7 @@ def build_news_site(news_json, links):
 
     return inspect.cleandoc(add_links(news_html, links))
 
-def build_pubs_site(pubs_json, links):
+def build_pubs_page(pubs_json, links):
     body_html  = "<body>\n"
     body_html += "<header><div id=\"scroller\"></div></header>\n"
     body_html += "<div class=\"content\">\n"
@@ -244,209 +354,111 @@ def build_pubs_site(pubs_json, links):
 
     return inspect.cleandoc(add_links(pubs_html, links))
 
-def replace_placeholders(text, map):
-    newtext = text
 
-    for k in map:
-        newtext = newtext.replace(k+"-placeholder", map[k])
+if __name__ == "__main__":
+    # Load json files
+    status("\nLoading json files:")
 
-    return newtext
+    meta_json = read_data('data/meta.json', optional=False)
+    fail_if_not("name"        in meta_json, "Must include a \"name\" in data/meta.json!")
+    fail_if_not("description" in meta_json, "Must include a \"description\" in data/meta.json!")
+    fail_if_not("favicon"     in meta_json, "Must include a \"favicon\" in data/meta.json!")
 
-# Helper functions for sanity checks
-def require(cond, msg):
-    if not cond:
-        msg     = f"ERROR: {msg}"
-        divider = "*"*len(msg)
-        debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
-        exit(1)
-
-def warning(cond, msg):
-    if not cond:
-        msg     = f"WARNING: {msg}"
-        divider = "*"*len(msg)
-        debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
-
-def optional(json, field, default = ""):
-    if not field in json:
-        json[field] = default
-
-    return json
-
-def check_tracker():
-    repo_url = subprocess.getoutput("git config --get remote.origin.url").split()[0]
-    my_url   = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
-    tracker  = meta_json["tracker"]
-
-    debug("- Sanity check on tracker script:")
-    debug(f"- - remote.origin.url: {repo_url}")
-    debug(f"- - tracker: {tracker}")
-
-    not_mine_implies_not_my_tracker = repo_url == my_url or "federicoaureliano" not in tracker
-    require(not_mine_implies_not_my_tracker, "Please use your own hit counter in data/meta.json")
-
-# Load json files
-debug("\nLoading json files:")
-
-with open('data/meta.json') as f:
-    debug("- data/meta.json")
-    try:
-        meta_json = json.load(f)
-    except Exception as e:
-        require(False, "Failed to parse data/meta.json. Maybe check your commas and braces?")
-
-    require("name"        in meta_json, "Must include a \"name\" in data/meta.json!")
-    require("description" in meta_json, "Must include a \"description\" in data/meta.json!")
-    require("favicon"     in meta_json, "Must include a \"favicon\" in data/meta.json!")
-
-    optional(meta_json, "tracker")
+    fill_if_missing(meta_json, "tracker")
     check_tracker()
 
-with open('data/style.json') as f:
-    debug("- data/style.json")
-    try:
-        style_json = json.load(f)
-    except Exception as e:
-        require(False, "Failed to parse data/style.json. Maybe check your commas and braces?")
 
-    require("font-color"       in style_json, "Must include a \"font-color\" in data/style.json!")
-    require("background-color" in style_json, "Must include a \"background-color\" in data/style.json!")
-    require("header-color"     in style_json, "Must include a \"header-color\" in data/style.json!")
-    require("accent-color"     in style_json, "Must include a \"accent-color\" in data/style.json!")
-    require("link-hover-color" in style_json, "Must include a \"link-hover-color\" in data/style.json!")
-    require("divider-color"    in style_json, "Must include a \"divider-color\" in data/style.json!")
+    style_json = read_data('data/style.json', optional=False)
+    fail_if_not("font-color"       in style_json, "Must include a \"font-color\" in data/style.json!")
+    fail_if_not("background-color" in style_json, "Must include a \"background-color\" in data/style.json!")
+    fail_if_not("header-color"     in style_json, "Must include a \"header-color\" in data/style.json!")
+    fail_if_not("accent-color"     in style_json, "Must include a \"accent-color\" in data/style.json!")
+    fail_if_not("link-hover-color" in style_json, "Must include a \"link-hover-color\" in data/style.json!")
+    fail_if_not("divider-color"    in style_json, "Must include a \"divider-color\" in data/style.json!")
 
-    require("paper-img"  in style_json, "Must include a \"paper-img\" in data/style.json!")
-    require("extra-img"  in style_json, "Must include a \"extra-img\" in data/style.json!")
-    require("slides-img" in style_json, "Must include a \"slides-img\" in data/style.json!")
+    fail_if_not("paper-img"  in style_json, "Must include a \"paper-img\" in data/style.json!")
+    fail_if_not("extra-img"  in style_json, "Must include a \"extra-img\" in data/style.json!")
+    fail_if_not("slides-img" in style_json, "Must include a \"slides-img\" in data/style.json!")
 
-    optional(style_json, "font-color-dark",       style_json["font-color"])
-    optional(style_json, "background-color-dark", style_json["background-color"])
-    optional(style_json, "header-color-dark",     style_json["header-color"])
-    optional(style_json, "accent-color-dark",     style_json["accent-color"])
-    optional(style_json, "link-hover-color-dark", style_json["link-hover-color"])
-    optional(style_json, "divider-color-dark",    style_json["divider-color"])
-    optional(style_json, "paper-img-dark",        style_json["paper-img"])
-    optional(style_json, "extra-img-dark",        style_json["extra-img"])
-    optional(style_json, "slides-img-dark",       style_json["slides-img"])
+    fill_if_missing(style_json, "font-color-dark",       style_json["font-color"])
+    fill_if_missing(style_json, "background-color-dark", style_json["background-color"])
+    fill_if_missing(style_json, "header-color-dark",     style_json["header-color"])
+    fill_if_missing(style_json, "accent-color-dark",     style_json["accent-color"])
+    fill_if_missing(style_json, "link-hover-color-dark", style_json["link-hover-color"])
+    fill_if_missing(style_json, "divider-color-dark",    style_json["divider-color"])
+    fill_if_missing(style_json, "paper-img-dark",        style_json["paper-img"])
+    fill_if_missing(style_json, "extra-img-dark",        style_json["extra-img"])
+    fill_if_missing(style_json, "slides-img-dark",       style_json["slides-img"])
 
-with open('data/profile.json') as f:
-    debug("- data/profile.json")
-    try:
-        profile_json = json.load(f)
-    except Exception as e:
-        require(False, "Failed to parse data/profile.json. Maybe check your commas and braces?")
 
-    require("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
-    require("blurb"    in profile_json, "Must include a \"blurb\" field in data/profile.json!")
-    require("cv"       in profile_json, "Must include a \"cv\" field in data/profile.json!")
-    require("email"    in profile_json, "Must include a \"email\" field in data/profile.json!")
-    require("scholar"  in profile_json, "Must include a \"scholar\" field in data/profile.json!")
+    profile_json = read_data('data/profile.json', optional=False)
+    fail_if_not("headshot" in profile_json, "Must include a \"headshot\" field in data/profile.json!")
+    fail_if_not("blurb"    in profile_json, "Must include a \"blurb\" field in data/profile.json!")
+    fail_if_not("cv"       in profile_json, "Must include a \"cv\" field in data/profile.json!")
+    fail_if_not("email"    in profile_json, "Must include a \"email\" field in data/profile.json!")
+    fail_if_not("scholar"  in profile_json, "Must include a \"scholar\" field in data/profile.json!")
 
-# These next four can be empty
-try:
-    with open('data/news.json') as f:
-        debug("- data/news.json")
-        news_json = json.load(f)
-        for news in news_json:
-            require("date" in news, "Must include a \"date\" field for each news in data/news.json!")
-            require("text" in news, "Must include a \"text\" field for each news in data/news.json!")
 
-        dates = [datetime.strptime(n["date"], '%m/%Y') for n in news_json]
-        warning(dates == sorted(dates, reverse=True), "The dates in data/news.json are not in order.")
-        
-except Exception as e:
-    debug(e, 0)
-    news_json = {}
+    # These next four can be empty
+    news_json = read_data('data/news.json', optional=True)
+    for news in news_json:
+        fail_if_not("date" in news, "Must include a \"date\" field for each news in data/news.json!")
+        fail_if_not("text" in news, "Must include a \"text\" field for each news in data/news.json!")
 
-try:
-    with open('data/pubs.json') as f:
-        debug("- data/pubs.json")
-        pubs_json = json.load(f)
-        for pub in pubs_json:
-            require("title"      in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
-            require("conference" in pub, "Must include a \"conference\" field for each pub in data/pubs.json!")
-            require("authors"    in pub, "Must include a \"authors\" field for each pub in data/pubs.json!")
+    dates = [datetime.strptime(n["date"], '%m/%Y') for n in news_json]
+    warn_if_not(dates == sorted(dates, reverse=True), "The dates in data/news.json are not in order.")
 
-            optional(pub, "link")
-            optional(pub, "extra")
-            optional(pub, "slides")
 
-            require("section"  in pub, "Must include a \"section\" field for each pub in data/pubs.json!")
-            require("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
+    pubs_json = read_data('data/pubs.json', optional=True)
+    for pub in pubs_json:
+        fail_if_not("title"      in pub, "Must include a \"title\" field for each pub in data/pubs.json!")
+        fail_if_not("conference" in pub, "Must include a \"conference\" field for each pub in data/pubs.json!")
+        fail_if_not("authors"    in pub, "Must include a \"authors\" field for each pub in data/pubs.json!")
 
-except Exception as e:
-    debug(e, 0)
-    pubs_json = {}
+        fill_if_missing(pub, "link")
+        fill_if_missing(pub, "extra")
+        fill_if_missing(pub, "slides")
 
-try:
-    with open('data/students.json') as f:
-        debug("- data/students.json")
-        students_json = json.load(f)
-        for student in students_json:
-            require("name"    in student, "Must include a \"name\" field for each student in data/students.json!")
-            require("project" in student, "Must include a \"project\" field for each student in data/students.json!")
-            require("result"  in student, "Must include a \"result\" field for each student in data/students.json!")
+        fail_if_not("section"  in pub, "Must include a \"section\" field for each pub in data/pubs.json!")
+        fail_if_not("selected" in pub, "Must include a \"selected\" field for each pub in data/pubs.json!")
 
-except Exception as e:
-    debug(e, 0)
-    students_json = {}
 
-try:
-    with open('data/auto_links.json') as f:
-        debug("- data/auto_links.json")
-        auto_links_json = json.load(f)
-except Exception as e:
-    debug(e, 0)
-    auto_links_json = {}
+    students_json = read_data('data/students.json', optional=True)
+    for student in students_json:
+        fail_if_not("name"    in student, "Must include a \"name\" field for each student in data/students.json!")
+        fail_if_not("project" in student, "Must include a \"project\" field for each student in data/students.json!")
+        fail_if_not("result"  in student, "Must include a \"result\" field for each student in data/students.json!")
 
-# Load templates
-debug("\nLoading template files:")
 
-with open('templates/main.css') as f:
-    debug("- templates/main.css")
-    main_css = f.read()
+    auto_links_json = read_data('data/auto_links.json', optional=True)
 
-with open('templates/head.html') as f:
-    debug("- templates/head.html")
-    head_html = f.read()
 
-with open('templates/footer.html') as f:
-    debug("- templates/footer.html")
-    footer_html = "\n\n" + f.read() if meta_json["name"] != "Federico Mora Rocha" else """
-<footer>
-    <p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>
-</footer>
-"""
+    # Load templates
+    status("\nLoading template files:")
+    main_css    = read_template('templates/main.css',    optional=False)
+    head_html   = read_template('templates/head.html',   optional=False)
+    footer_html = read_template('templates/footer.html', optional=False)
 
-# Create HTML and CSS
-head_html   = replace_placeholders(head_html, meta_json)
-footer_html = replace_placeholders(footer_html, meta_json)
-main_css    = replace_placeholders(main_css, style_json)
-index_html  = build_index(profile_json, news_json, pubs_json, students_json, auto_links_json)
-news_site   = build_news_site(news_json, auto_links_json)
-pubs_site   = build_pubs_site(pubs_json, auto_links_json)
+    footer_html = "\n\n" + footer_html if not is_federicos() else """\n<footer>\n<p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>\n</footer>\n"""
 
-# Write to files
-debug("\nWriting website:")
 
-with open('docs/index.html', 'w') as index:
-    debug("- docs/index.html")
-    index.write(index_html)
+    # Create HTML and CSS
+    head_html   = replace_placeholders(head_html, meta_json)
+    footer_html = replace_placeholders(footer_html, meta_json)
+    main_css    = replace_placeholders(main_css, style_json)
+    index_page  = build_index(profile_json, news_json, pubs_json, students_json, auto_links_json)
+    news_page   = build_news_page(news_json, auto_links_json)
+    pubs_page   = build_pubs_page(pubs_json, auto_links_json)
 
-with open('docs/news.html', 'w') as index:
-    debug("- docs/news.html")
-    index.write(news_site)
+    # Write to files
+    status("\nWriting website:")
+    write_file('docs/index.html', index_page)
+    write_file('docs/news.html',  news_page)
+    write_file('docs/pubs.html',  pubs_page)
+    write_file('docs/main.css',   main_css)
 
-with open('docs/pubs.html', 'w') as index:
-    debug("- docs/pubs.html")
-    index.write(pubs_site)
 
-with open('docs/main.css', 'w') as main:
-    debug("- docs/main.css")
-    main.write(main_css)
-
-# Got to here means everything went well
-msg     = "Success! Open docs/index.html in your browser to see your website!"
-divider = "*"*len(msg)
-debug(f"\n{divider}\n{msg}\n{divider}\n", 0)
-exit(0)
+    # Got to here means everything went well
+    msg = "Open docs/index.html in your browser to see your website!"
+    success(msg)
+    exit(0)
