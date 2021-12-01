@@ -1,13 +1,25 @@
 #!python3
 
+import os
 import sys
 import json
 import inspect
 import subprocess
 
+from typing import Dict, List
 from datetime import datetime
 
 VERBOSITY = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+
+TARGET    = "docs"
+TEMPLATES = "templates"
+
+def cleanup():
+    for f in [f'{TARGET}/index.html', f'{TARGET}/news.html', f'{TARGET}/pubs.html', f'{TARGET}/main.css']:
+        try:
+            os.remove(f)
+        except Exception as e:
+            pass
 
 # for printing with colours
 class bcolors:
@@ -20,7 +32,7 @@ class bcolors:
     ENDC    = '\033[0m'
 
 # Helper functions
-def status(msg, priority = 1):
+def status(msg: str, priority = 1):
     if priority <= VERBOSITY:
         if priority == 0:
             divider = "*"*len(msg)
@@ -31,37 +43,38 @@ def status(msg, priority = 1):
         else:
             print(f"{bcolors.OKCYAN}{msg}{bcolors.ENDC}")
 
-def success(msg):
+def success(msg: str):
     msg     = f"SUCCESS: {msg}"
     divider = "*"*len(msg)
     msg     = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.SUCCESS}{msg}{bcolors.ENDC}")
 
-def warning(msg):
+def warning(msg: str):
     msg     = f"WARNING: {msg}"
     divider = "*"*len(msg)
     msg     = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.WARNING}{msg}{bcolors.ENDC}")
 
-def error(msg):
+def error(msg: str):
     msg     = f"ERROR: {msg}"
     divider = "*"*len(msg)
     msg     = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.ERROR}{msg}{bcolors.ENDC}")
+    cleanup()
     exit(1)
 
-def warn_if_not(cond, msg):
+def warn_if_not(cond: bool, msg: str):
     if not cond:
         warning(msg)
 
-def fail_if_not(cond, msg):
+def fail_if_not(cond: bool, msg: str):
     if not cond:
         error(msg)
 
-def fill_if_missing(json, field, default = ""):
+def fill_if_missing(json: Dict[str, str], field: str, default = ""):
     if not field in json:
         json[field] = default
 
@@ -84,7 +97,7 @@ def check_tracker():
     fail_if_not(not_mine_implies_not_my_tracker, "Please use your own tracker in data/meta.json")
 
 
-def read_data(json_file_name, optional):
+def read_data(json_file_name: str, optional: bool):
     try:
         with open(json_file_name) as f:
             status(f"- loading {json_file_name}")
@@ -97,7 +110,7 @@ def read_data(json_file_name, optional):
     
     return data
 
-def read_template(template_file_name, optional):
+def read_template(template_file_name: str, optional: bool):
     with open(template_file_name) as f:
         status(f"- loading {template_file_name}")
         try:
@@ -106,16 +119,19 @@ def read_template(template_file_name, optional):
             fail_if_not(optional, f"Failed to read {template_file_name}. Does it exist?")
             # fail_if_not will exit if needed
             status(f"Couldn't load {template_file_name}---treating it as empty.", 0)
-            data = {}
+            data = ""
     
     return data
 
-def write_file(file_name, contents):
+def write_file(file_name: str, contents: str):
+    if contents == "":
+        return
+
     with open(file_name, 'w') as target:
         status(f"- writing {file_name}")
         target.write(contents)
 
-def replace_placeholders(text, map):
+def replace_placeholders(text: str, map: Dict[str, str]):
     newtext = text
 
     for k in map:
@@ -124,7 +140,7 @@ def replace_placeholders(text, map):
     return newtext
 
 # Define functions for website pieces
-def build_news(news, count, standalone):
+def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
     if count > len(news):
         count = len(news)
 
@@ -162,21 +178,21 @@ def build_news(news, count, standalone):
     return news_html
 
 # Helper function to decide what publication sections to include
-def get_pub_titles(pubs):
+def get_pub_titles(pubs: List[Dict[str, str]]):
     titles = set()
     for p in pubs:
         titles.add(p["section"])
 
     return sorted(list(titles))
 
-def some_not_selected(pubs):
+def some_not_selected(pubs: List[Dict[str, str]]):
     for p in pubs:
         if not p["selected"]:
             return True
 
     return False
 
-def build_pubs_inner(pubs, title, full):
+def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
     if title == "":
         return ""
 
@@ -204,7 +220,7 @@ def build_pubs_inner(pubs, title, full):
 
     return pubs_html
 
-def build_pubs(pubs, full):
+def build_pubs(pubs: List[Dict[str, str]], full: bool):
     if len(pubs) == 0:
         return ""
 
@@ -234,7 +250,7 @@ def build_pubs(pubs, full):
 
     return pubs_html
 
-def build_students(students):
+def build_students(students: List[Dict[str, str]]):
     if len(students) == 0:
         return ""
 
@@ -259,7 +275,7 @@ def build_students(students):
 
     return students_html
 
-def build_profile(profile):
+def build_profile(profile: Dict[str, str]):
     profile_html  = "<div class=\"profile\">\n"
     profile_html += "<div class=\"profile-left\">\n"
     profile_html += "<img class=\"headshot\" src=\"%s\" alt=\"Headshot\"/>\n" % profile["headshot"]
@@ -274,7 +290,7 @@ def build_profile(profile):
 
     return profile_html
 
-def add_links(html, links):
+def add_links(html: str, links: Dict[str, str]):
     status("\nAdding links:", 2)
 
     toreplace = sorted(links.keys(), key=len, reverse=True)
@@ -289,18 +305,19 @@ def add_links(html, links):
             close = html[:pos].count("</a>")
 
             status(f"- {name} {pos} {open} {close}", 2)
+            target = ""
             if pos >= 0 and open == close:
-                toreplace = "<a href=\"%s\">%s</a>" % (links[name], name)
-                suffix    = suffix.replace(name, toreplace, 1)
+                target = "<a href=\"%s\">%s</a>" % (links[name], name)
+                suffix    = suffix.replace(name, target, 1)
                 html      = prefix+suffix
 
-            start = len(prefix) + len(toreplace) - len(name)
+            start = len(prefix) + len(target) - len(name)
             tmp   = html[start:].find(name)
             pos   = tmp + start if tmp >= 0 else tmp
     
     return html
 
-def build_index(profile_json, news_json, pubs_json, students_json, links):
+def build_index(profile_json: Dict[str, str], news_json: List[Dict[str, str]], pubs_json: List[Dict[str, str]], students_json: List[Dict[str, str]], links: Dict[str, str]):
     body_html  = "<body>\n"
     body_html += "<header><div id=\"scroller\"></div></header>\n"
     body_html += "<div class=\"content\">\n"
@@ -320,11 +337,16 @@ def build_index(profile_json, news_json, pubs_json, students_json, links):
 
     return inspect.cleandoc(add_links(index_page, links))
 
-def build_news_page(news_json, links):
+def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str]):
+    content = build_news(news_json, len(news_json), True)
+
+    if content == "":
+        return ""
+
     body_html  = "<body>\n"
     body_html += "<header><div id=\"scroller\"></div></header>\n"
     body_html += "<div class=\"content\">\n"
-    body_html += build_news(news_json, len(news_json), True)
+    body_html += content
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -337,11 +359,16 @@ def build_news_page(news_json, links):
 
     return inspect.cleandoc(add_links(news_html, links))
 
-def build_pubs_page(pubs_json, links):
+def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str]):
+    content = build_pubs(pubs_json, True)
+
+    if content == "":
+        return ""
+
     body_html  = "<body>\n"
     body_html += "<header><div id=\"scroller\"></div></header>\n"
     body_html += "<div class=\"content\">\n"
-    body_html += build_pubs(pubs_json, True)
+    body_html += content
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -356,6 +383,8 @@ def build_pubs_page(pubs_json, links):
 
 
 if __name__ == "__main__":
+    cleanup()
+
     # Load json files
     status("\nLoading json files:")
 
@@ -435,11 +464,11 @@ if __name__ == "__main__":
 
     # Load templates
     status("\nLoading template files:")
-    main_css    = read_template('templates/main.css',    optional=False)
-    head_html   = read_template('templates/head.html',   optional=False)
-    footer_html = read_template('templates/footer.html', optional=False)
+    main_css    = read_template(f'{TEMPLATES}/main.css',    optional=False)
+    head_html   = read_template(f'{TEMPLATES}/head.html',   optional=False)
+    footer_html = read_template(f'{TEMPLATES}/footer.html', optional=False)
 
-    footer_html = "\n\n" + footer_html if not is_federicos() else """\n<footer>\n<p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>\n</footer>\n"""
+    footer_html = "\n" + footer_html if not is_federicos() else """\n<footer>\n<p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>\n</footer>\n"""
 
 
     # Create HTML and CSS
@@ -452,13 +481,13 @@ if __name__ == "__main__":
 
     # Write to files
     status("\nWriting website:")
-    write_file('docs/index.html', index_page)
-    write_file('docs/news.html',  news_page)
-    write_file('docs/pubs.html',  pubs_page)
-    write_file('docs/main.css',   main_css)
+    write_file(f'{TARGET}/index.html', index_page)
+    write_file(f'{TARGET}/news.html',  news_page)
+    write_file(f'{TARGET}/pubs.html',  pubs_page)
+    write_file(f'{TARGET}/main.css',   main_css)
 
 
     # Got to here means everything went well
-    msg = "Open docs/index.html in your browser to see your website!"
+    msg = f"Open {TARGET}/index.html in your browser to see your website!"
     success(msg)
     exit(0)
