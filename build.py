@@ -305,13 +305,13 @@ def add_links(html: str, links: Dict[str, str]):
             close = html[:pos].count("</a>")
 
             status(f"- {name} {pos} {open} {close}", 2)
-            target = ""
+            target = name + " "
             if pos >= 0 and open == close:
                 target = "<a href=\"%s\">%s</a>" % (links[name], name)
-                suffix    = suffix.replace(name, target, 1)
-                html      = prefix+suffix
+                suffix = suffix.replace(name, target, 1)
+                html   = prefix+suffix
 
-            start = len(prefix) + len(target) - len(name)
+            start = (len(prefix) - len(name)) + len(target) # we got rid of name and replaced it with target
             tmp   = html[start:].find(name)
             pos   = tmp + start if tmp >= 0 else tmp
     
