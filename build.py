@@ -162,10 +162,10 @@ def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
 
     if (count != len(news)):
         link       = "<a href=\"./news.html\">See all posts</a>"
-        news_html += "<h1>Recent News <small style=\"font-weight: 300; float: right; margin-top: 0.23em\">(%s)</small></h1>\n" %link
+        news_html += "<h1>Recent News <small style=\"font-weight: 300; float: right; padding-top: 0.23em\">(%s)</small></h1>\n" %link
     elif standalone:
         link       = "<a href=\"./index.html\">%s</a>" % meta_json["name"]
-        news_html += "<h1>News <small style=\"font-weight: 300; float: right; margin-top: 0.23em\">%s</small></h1>\n" %link
+        news_html += "<h1>News <small style=\"font-weight: 300; float: right; padding-top: 0.23em\">%s</small></h1>\n" %link
     else:
         news_html += "<h1>News</h1>\n"
 
@@ -202,16 +202,18 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
         if title == p["section"] and (p["selected"] or full):
             status("- " + p["title"])
             item  = '<div class="paper">\n'
-            item += '<div class="paper-left">\n'
+            item += '<div class="paper-flex">\n'
             item += '<div class="paper-conference">' + p["conference"] + '</div>\n'
-            item += '<a href="' + p["link"] + '" alt="[PDF]"><img class="icon" src="%s"/><img class="icon-dark" src="%s"/></a>\n' % (style_json["paper-img"], style_json["paper-img-dark"]) if p["link"] else ""
-            item += '<a href="' + p["extra"] + '" alt="[Extra]"><img class="icon" src="%s"/><img class="icon-dark" src="%s"/></a>\n' % (style_json["extra-img"], style_json["extra-img-dark"]) if p["extra"] else ""
-            item += '<a href="' + p["slides"] + '" alt="[Slides]"><img class="icon" src="%s"/><img class="icon-dark" src="%s"/></a>\n' % (style_json["slides-img"], style_json["slides-img-dark"]) if p["slides"] else ""
-            item += '</div>\n' # close paper-left
-            item += '<div class="paper-right">\n'
+            item += '<div class="paper-details">\n'
             item += '<div class="paper-title">' + p["title"] + '</div>\n'
             item += '<div class="paper-authors">' + ",\n".join(p["authors"].split(", ")) + '</div>\n'
-            item += '</div>\n' # close paper-right
+            item += '</div>\n' # close paper-details
+            item += '<div class="paper-icons">\n'
+            item += '<a href="' + p["link"] + '" alt="[PDF] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>' % (style_json["paper-img"], style_json["paper-img-dark"]) if p["link"] else ""
+            item += '<a href="' + p["extra"] + '" alt="[Extra] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>' % (style_json["extra-img"], style_json["extra-img-dark"]) if p["extra"] else ""
+            item += '<a href="' + p["slides"] + '" alt="[Slides] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>' % (style_json["slides-img"], style_json["slides-img-dark"]) if p["slides"] else ""
+            item += '</div>\n' # close paper-icons
+            item += '</div>\n' # close paper-flex
             item += '</div>\n' # close paper
             pubs_list += item
 
@@ -229,10 +231,10 @@ def build_pubs(pubs: List[Dict[str, str]], full: bool):
     pubs_html =  "<div class=\"section\">\n"
 
     if some_not_selected(pubs) and not full: 
-        pubs_html += "<h1>Selected Publications <small style=\"font-weight: 300; float: right; margin-top: 0.23em\">(<a href=\"./pubs.html\">See all publications</a>)</small></h1>" 
+        pubs_html += "<h1>Selected Publications <small style=\"font-weight: 300; float: right; padding-top: 0.23em\">(<a href=\"./pubs.html\">See all publications</a>)</small></h1>" 
     elif full: 
         link       = "<a href=\"./index.html\">%s</a>" % meta_json["name"]
-        pubs_html += "<h1>Publications <small style=\"font-weight: 300; float: right; margin-top: 0.23em\">%s</small></h1>\n" %link
+        pubs_html += "<h1>Publications <small style=\"font-weight: 300; float: right; padding-top: 0.23em\">%s</small></h1>\n" %link
     else: 
         pubs_html += "<h1>Publications</h1>"
 
@@ -277,7 +279,6 @@ def build_students(students: List[Dict[str, str]]):
 
 def build_profile(profile: Dict[str, str]):
     profile_html  = "<div class=\"profile\">\n"
-    profile_html += "<div class=\"profile-left\">\n"
     profile_html += "<img class=\"headshot\" src=\"%s\" alt=\"Headshot\"/>\n" % profile["headshot"]
     profile_html += profile["blurb"]
     profile_html += "\n<p>Here is my "
@@ -285,7 +286,6 @@ def build_profile(profile: Dict[str, str]):
     profile_html += "<a href=\"%s\">Google Scholar</a>. " % profile["scholar"]
     profile_html += "You can reach me at %s." % profile["email"]
     profile_html += "</p>\n" # close description paragraph
-    profile_html += "</div>\n" # close profile-left
     profile_html += "</div>\n" # close profile
 
     return profile_html
