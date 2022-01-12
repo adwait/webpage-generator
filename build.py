@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import inspect
+import pathlib
 import subprocess
 
 from typing import Dict, List
@@ -91,10 +92,20 @@ def is_federicos():
 def check_tracker():
     tracker = meta_json["tracker"]
 
-    status("- Sanity check on tracker script:")
+    status("- Sanity check on tracker script")
 
     not_mine_implies_not_my_tracker = is_federicos() or "federicoaureliano" not in tracker
     fail_if_not(not_mine_implies_not_my_tracker, "Please use your own tracker in data/meta.json")
+
+def check_cname():
+    path = os.path.join(pathlib.Path().resolve(), "docs", "CNAME")
+    with open(path) as f:
+        cname = f.read()
+
+    status("- Sanity check on CNAME")
+
+    not_mine_implies_not_my_cname = is_federicos() or "federico.morarocha.ca" != cname
+    fail_if_not(not_mine_implies_not_my_cname, f"Please use your own CNAME at {path}")
 
 
 def read_data(json_file_name: str, optional: bool):
@@ -386,12 +397,14 @@ if __name__ == "__main__":
     cleanup()
 
     # Load json files
-    status("\nLoading json files:")
+    status("Loading json files:")
 
     meta_json = read_data('data/meta.json', optional=False)
     fail_if_not("name"        in meta_json, "Must include a \"name\" in data/meta.json!")
     fail_if_not("description" in meta_json, "Must include a \"description\" in data/meta.json!")
     fail_if_not("favicon"     in meta_json, "Must include a \"favicon\" in data/meta.json!")
+
+    check_cname()
 
     fill_if_missing(meta_json, "tracker")
     check_tracker()
