@@ -14,12 +14,13 @@ VERBOSITY = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 
 TARGET    = "docs"
 TEMPLATES = "templates"
+PREFIX    = os.path.dirname(__file__)
 
 def cleanup():
     for f in [f'{TARGET}/index.html', f'{TARGET}/news.html', f'{TARGET}/pubs.html', f'{TARGET}/main.css']:
         try:
             os.remove(f)
-        except Exception as e:
+        except Exception as _:
             pass
 
 # for printing with colours
@@ -82,7 +83,11 @@ def fill_if_missing(json: Dict[str, str], field: str, default = ""):
     return json
 
 def is_federicos():
-    repo_url        = subprocess.getoutput("git config --get remote.origin.url").split()[0]
+    try:
+        repo_url = subprocess.getoutput(f"git -C {PREFIX} config --get remote.origin.url").split()[0]
+    except Exception as _:
+        repo_url = ""
+
     federicos_url   = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
     name            = meta_json["name"]
     federicos_name  = "Federico Mora Rocha"
@@ -90,56 +95,63 @@ def is_federicos():
     return name == federicos_name and repo_url == federicos_url
 
 def check_tracker():
-    tracker = meta_json["tracker"]
-
     status("- Sanity check on tracker script")
+
+    tracker = meta_json["tracker"]
 
     not_mine_implies_not_my_tracker = is_federicos() or "federicoaureliano" not in tracker
     fail_if_not(not_mine_implies_not_my_tracker, "Please use your own tracker in data/meta.json")
 
 def check_cname():
-    path = os.path.join(pathlib.Path().resolve(), "docs", "CNAME")
-    with open(path) as f:
-        cname = f.read()
-
     status("- Sanity check on CNAME")
+
+    path = os.path.join(PREFIX, "docs", "CNAME")
+    try:
+        with open(path) as f:
+            cname = f.read()
+    except Exception as _:
+        status(f"  - Couldn't load CNAME---treating it as empty.", 1)
+        cname = ""
 
     not_mine_implies_not_my_cname = is_federicos() or "federico.morarocha.ca" != cname
     fail_if_not(not_mine_implies_not_my_cname, f"Please use your own CNAME at {path}")
 
 
 def read_data(json_file_name: str, optional: bool):
+    path = os.path.join(PREFIX, json_file_name)
     try:
-        with open(json_file_name) as f:
-            status(f"- loading {json_file_name}")
+        with open(path) as f:
+            status(f"- loading {path}")
             data = json.load(f)
-    except Exception as e:
-        fail_if_not(optional, f"Failed to parse {json_file_name}. Check your commas, braces, and if the file exists.")
+    except Exception as _:
+        fail_if_not(optional, f"Failed to parse {path}. Check your commas, braces, and if the file exists.")
         # fail_if_not will exit if needed so the code below will only run if this data is optional
-        status(f"Failed to load {json_file_name}---treating it as empty.", 0)
+        status(f"Failed to load {path}---treating it as empty.", 0)
         data = {}
     
     return data
 
 def read_template(template_file_name: str, optional: bool):
-    with open(template_file_name) as f:
-        status(f"- loading {template_file_name}")
+    path = os.path.join(PREFIX, template_file_name)
+    with open(path) as f:
+        status(f"- loading {path}")
         try:
             data = f.read()
-        except Exception as e:
-            fail_if_not(optional, f"Failed to read {template_file_name}. Does it exist?")
+        except Exception as _:
+            fail_if_not(optional, f"Failed to read {path}. Does it exist?")
             # fail_if_not will exit if needed
-            status(f"Couldn't load {template_file_name}---treating it as empty.", 0)
+            status(f"Couldn't load {path}---treating it as empty.", 0)
             data = ""
     
     return data
 
 def write_file(file_name: str, contents: str):
+    path = os.path.join(PREFIX, file_name)
     if contents == "":
         return
 
-    with open(file_name, 'w') as target:
-        status(f"- writing {file_name}")
+    with open(path, 'w') as target:
+        status(f"- writing {path}")
         target.write(contents)
 
 def replace_placeholders(text: str, map: Dict[str, str]):
@@ -404,11 +416,6 @@ if __name__ == "__main__":
     fail_if_not("description" in meta_json, "Must include a \"description\" in data/meta.json!")
     fail_if_not("favicon"     in meta_json, "Must include a \"favicon\" in data/meta.json!")
 
-    check_cname()
-
-    fill_if_missing(meta_json, "tracker")
-    check_tracker()
-
 
     style_json = read_data('data/style.json', optional=False)
     fail_if_not("font-color"       in style_json, "Must include a \"font-color\" in data/style.json!")
@@ -473,6 +480,14 @@ if __name__ == "__main__":
 
 
     auto_links_json = read_data('data/auto_links.json', optional=True)
+
+
+    # Sanity checks
+    status("\nPerforming sanity checks:")
+    check_cname()
+
+    fill_if_missing(meta_json, "tracker")
+    check_tracker()
 
 
     # Load templates
