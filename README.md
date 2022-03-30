@@ -1,4 +1,4 @@
-# Federico's Personal Academic Webpage
+# Federico's Academic Website
 
 Feel free to do whatever you want with this website generator. No need to ask for permission or to credit me on your site. If you do use it, I'd love to hear how it went :)
 
