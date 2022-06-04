@@ -1,5 +1,15 @@
 [
     {
+        "title"     : "UCLID5: Multi-Modal Formal Modeling, Verification, and Synthesis",
+        "conference": "CAV '22",
+        "authors"   : "E. Polgreen, K. Cheang, P. Gaddamadugu, A. Godbole, K. Laeufer, S. Lin, Y. Manerkar, F. Mora, and S. Seshia",
+        "link"      : "",
+        "extra"     : "https://github.com/uclid-org/uclid",
+        "slides"    : "",
+        "section"   : "Refereed Workshop, Short & Tool Papers",
+        "selected"  : true
+    },
+    {
         "title"     : "Z3str4: A Multi-armed String Solver",
         "conference": "FM '21",
         "authors"   : "F. Mora, M. Berzish, M. Kulczynski, D. Nowotka, and V. Ganesh",
@@ -80,7 +90,7 @@
         "selected"  : false
     },
     {
-        "title"     : "Synthesis in Uclid5",
+        "title"     : "Synthesis in UCLID5",
         "conference": "SYNT '20",
         "authors"   : "F. Mora, K. Cheang, E. Polgreen, and S. Seshia",
         "link"      : "https://people.eecs.berkeley.edu/~fmora/synt20.pdf",

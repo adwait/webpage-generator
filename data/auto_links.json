@@ -16,6 +16,7 @@
     "M. Akhundov": "http://murad-akh.ca/",
     "Sanjit A. Seshia": "https://people.eecs.berkeley.edu/~sseshia/",
     "S. Seshia": "https://people.eecs.berkeley.edu/~sseshia/",
+    "Sanjit": "https://people.eecs.berkeley.edu/~sseshia/",
     "J. Scott" : "https://cs.uwaterloo.ca/~j29scott/",
     "E. Polgreen" : "https://polgreen.github.io/",
     "K. Cheang" : "https://github.com/kkmc",
@@ -30,6 +31,11 @@
     "Nikhil Pimpalkhare": "http://nikhilpim.github.io/",
     "A. Desai": "https://ankushdesai.github.io/",
     "N. Chan" : "https://www.nicolaschan.com/",
+    "K. Laeufer" : "https://kevinlaeufer.com/",
+    "S. Lin" : "https://shaokai.io/",
+    "Y. Manerkar": "https://web.eecs.umich.edu/~manerkar/",
+    "A. Godbole": "https://github.com/adwait",
+    "P. Gaddamadugu": "https://github.com/d0cd",
     
     "Waterloo ML + Security + Verification Workshop": "https://ece.uwaterloo.ca/~MLSecurity/index.html",
     "POPL Undergraduate Student Research Competition" : "https://popl20.sigplan.org/track/POPL-2020-Student-Research-Competition",
@@ -53,8 +59,11 @@
     "ATVA '21": "https://formal-analysis.com/atva/2021/",
     "WORDS '21" : "https://words2021.sciencesconf.org/",
     "FM '21" : "https://lcs.ios.ac.cn/fm2021/",
+    "CAV '22" : "http://i-cav.org/2022/",
 
     "Qualcomm Innovation Fellowship": "https://www.qualcomm.com/research/research/university-relations/innovation-fellowship/winners",
 
-    "The African American Museum and Library at Oakland": "https://oaklandlibrary.org/content/newspapers-and-journalists/"
+    "The African American Museum and Library at Oakland": "https://oaklandlibrary.org/content/newspapers-and-journalists/",
+
+    "Eleventh Summer School on Formal Techniques": "https://fm.csl.sri.com/SSFT22/"
 }
