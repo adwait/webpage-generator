@@ -174,40 +174,15 @@ a {
 
 /* End News and Pubs */
 
-/* Start Mentoring */
-.student {
-    float: left;
-    width: calc(50% - 1em);
-    padding-top: 1em;
-    padding-right: 1em;
-}
-
-.student-result, .student-project {
-    font-size: smaller;
-}
-/* End Mentoring */
-
-/* Extra stuff for both pubs and students */
+/* Extra stuff for pubs */
 .paper-flex:before,
 .paper-flex:after,
-#students:before,
-#students:after {
-  content: "";
-  display: block;
-  width: 0;
-}
-#students:after, .paper-flex:after {
+.paper-flex:after {
   clear: both;
 }
 
 /* Special Stuff For Small Screens */
 @media screen and (max-width: 600px) {
-    .student {
-        display: list-item;
-        list-style-type: circle;
-        margin-left: 1em;
-        width: calc(100% - 1em);
-    }
 
     .paper {
         display: list-item;

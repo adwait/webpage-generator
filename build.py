@@ -335,32 +335,6 @@ def build_pubs(pubs: List[Dict[str, str]], full: bool):
     return pubs_html
 
 
-def build_students(students: List[Dict[str, str]]):
-    if len(students) == 0:
-        return ""
-
-    status("\nAdding students:")
-    students_list = ""
-
-    for p in students:
-        status("- " + p["name"])
-        item  = '<div class="student">\n' + p["name"] + "\n"
-        item += '<div class="student-project">' + p["project"] + "</div>\n"
-        item += '<div class="student-result">' + p["result"] + "</div>\n"
-        item += "</div>\n"
-        students_list += item
-
-    students_html  = '<div class="section">\n'
-    students_html += "<h1>Mentoring</h1>\n"
-    students_html += '<div class="hbar"></div>\n'
-    students_html += '<div id="students">\n'
-    students_html += students_list
-    students_html += "</div>\n"  # close students
-    students_html += "</div>\n"  # close section
-
-    return students_html
-
-
 def build_profile(profile: Dict[str, str]):
     profile_html  = '<div class="profile">\n'
     profile_html += (
@@ -411,7 +385,6 @@ def build_index(
     profile_json : Dict[str, str],
     news_json    : List[Dict[str, str]],
     pubs_json    : List[Dict[str, str]],
-    students_json: List[Dict[str, str]],
     links        : Dict[str, str],
 ):
     body_html  = "<body>\n"
@@ -420,7 +393,6 @@ def build_index(
     body_html += build_profile(profile_json)
     body_html += build_news(news_json, 5, False)
     body_html += build_pubs(pubs_json, False)
-    body_html += build_students(students_json)
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -621,21 +593,6 @@ if __name__ == "__main__":
             'Must include a "selected" field for each pub in data/pubs.json!',
         )
 
-    students_json = read_data("data/students.json", optional=True)
-    for student in students_json:
-        fail_if_not(
-            "name" in student,
-            'Must include a "name" field for each student in data/students.json!',
-        )
-        fail_if_not(
-            "project" in student,
-            'Must include a "project" field for each student in data/students.json!',
-        )
-        fail_if_not(
-            "result" in student,
-            'Must include a "result" field for each student in data/students.json!',
-        )
-
     auto_links_json = read_data("data/auto_links.json", optional=True)
 
     # Sanity checks
@@ -662,7 +619,7 @@ if __name__ == "__main__":
     news_page   = build_news_page(news_json, auto_links_json)
     pubs_page   = build_pubs_page(pubs_json, auto_links_json)
     index_page  = build_index(
-        profile_json, news_json, pubs_json, students_json, auto_links_json
+        profile_json, news_json, pubs_json, auto_links_json
     )
 
     # Write to files
