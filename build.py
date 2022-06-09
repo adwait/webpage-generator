@@ -8,6 +8,7 @@ import subprocess
 
 from typing import Dict, List
 from datetime import datetime
+from xmlrpc.client import Boolean
 
 from faws.config import Config
 
@@ -151,15 +152,15 @@ def read_data(json_file_name: str, optional: bool):
 
 def read_template(template_file_name: str, optional: bool):
     path = os.path.join(config.prefix, template_file_name)
-    with open(path) as f:
-        status(f"- loading {path}")
-        try:
+    try:
+        with open(path) as f:
+            status(f"- loading {path}")
             data = f.read()
-        except Exception as _:
-            fail_if_not(optional, f"Failed to read {path}. Does it exist?")
-            # fail_if_not will exit if needed
-            status(f"Couldn't load {path}---treating it as empty.", 0)
-            data = ""
+    except Exception as _:
+        fail_if_not(optional, f"Failed to read {path}. Does it exist?")
+        # fail_if_not will exit if needed
+        status(f"Couldn't load {path}---treating it as empty.", 0)
+        data = ""
 
     return data
 
@@ -185,15 +186,18 @@ def replace_placeholders(text: str, map: Dict[str, str]):
 
 # Define functions for website pieces
 
-def header():
-    out = """<header><div id="scroller"></div>
-<label class="switch-mode">
+def header(has_dark):
+    if has_dark:
+        button = """<label class="switch-mode">
     <input type="checkbox" id="mode">
     <span class="slider round"></span>
 </label>
 <script src="mode.js"></script>
-</header>
 """
+    else:
+        button = ""
+
+    out = "<header><div id=\"scroller\"></div>\n%s</header>\n" % button
     return out
 
 def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
@@ -398,9 +402,10 @@ def build_index(
     news_json    : List[Dict[str, str]],
     pubs_json    : List[Dict[str, str]],
     links        : Dict[str, str],
+    has_dark     : Boolean
 ):
     body_html  = "<body>\n"
-    body_html += header()
+    body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
     body_html += build_news(news_json, 5, False)
@@ -418,14 +423,14 @@ def build_index(
     return inspect.cleandoc(add_links(index_page, links))
 
 
-def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str]):
+def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: Boolean):
     content = build_news(news_json, len(news_json), True)
 
     if content == "":
         return ""
 
     body_html  = "<body>\n"
-    body_html += header()
+    body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += content
     body_html += "</div>\n"
@@ -441,14 +446,14 @@ def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str]):
     return inspect.cleandoc(add_links(news_html, links))
 
 
-def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str]):
+def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: Boolean):
     content = build_pubs(pubs_json, True)
 
     if content == "":
         return ""
 
     body_html  = "<body>\n"
-    body_html += header()
+    body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += content
     body_html += "</div>\n"
@@ -617,7 +622,9 @@ if __name__ == "__main__":
     status("\nLoading template files:")
     main_css    = read_template(f"{config.templates}/main.css", optional=False)
     light_css   = read_template(f"{config.templates}/light.css", optional=False)
-    dark_css    = read_template(f"{config.templates}/dark.css", optional=False)
+    dark_css    = read_template(f"{config.templates}/dark.css", optional=True)
+    dark_css    = light_css if dark_css == "" else dark_css
+    has_dark    = light_css != dark_css
     head_html   = read_template(f"{config.templates}/head.html", optional=False)
     footer_html = read_template(f"{config.templates}/footer.html", optional=False)
 
@@ -632,10 +639,10 @@ if __name__ == "__main__":
     main_css    = replace_placeholders(main_css, style_json)
     light_css   = replace_placeholders(light_css, style_json)
     dark_css    = replace_placeholders(dark_css, style_json)
-    news_page   = build_news_page(news_json, auto_links_json)
-    pubs_page   = build_pubs_page(pubs_json, auto_links_json)
+    news_page   = build_news_page(news_json, auto_links_json, has_dark)
+    pubs_page   = build_pubs_page(pubs_json, auto_links_json, has_dark)
     index_page  = build_index(
-        profile_json, news_json, pubs_json, auto_links_json
+        profile_json, news_json, pubs_json, auto_links_json, has_dark
     )
 
     # Write to files
