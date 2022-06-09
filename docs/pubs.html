@@ -8,13 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="reset.css">
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="light.css" id="theme-link">
     <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
     <script src="scroller.js"></script> 
     <script data-goatcounter="https://federicoaureliano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 
 <body>
-<header><div id="scroller"></div></header>
+<header><div id="scroller"></div>
+<label class="switch-mode">
+    <input type="checkbox" id="mode">
+    <span class="slider round"></span>
+</label>
+<script src="mode.js"></script>
+</header>
 <div class="content">
 <div class="section">
 <h1>Publications <small style="font-weight: 300; float: right; padding-top: 0.23em"><a href="./index.html">Federico Mora Rocha</a></small></h1>

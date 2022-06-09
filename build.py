@@ -184,6 +184,18 @@ def replace_placeholders(text: str, map: Dict[str, str]):
 
 
 # Define functions for website pieces
+
+def header():
+    out = """<header><div id="scroller"></div>
+<label class="switch-mode">
+    <input type="checkbox" id="mode">
+    <span class="slider round"></span>
+</label>
+<script src="mode.js"></script>
+</header>
+"""
+    return out
+
 def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
     if count > len(news):
         count = len(news)
@@ -388,7 +400,7 @@ def build_index(
     links        : Dict[str, str],
 ):
     body_html  = "<body>\n"
-    body_html += '<header><div id="scroller"></div></header>\n'
+    body_html += header()
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
     body_html += build_news(news_json, 5, False)
@@ -413,7 +425,7 @@ def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str]):
         return ""
 
     body_html  = "<body>\n"
-    body_html += '<header><div id="scroller"></div></header>\n'
+    body_html += header()
     body_html += '<div class="content">\n'
     body_html += content
     body_html += "</div>\n"
@@ -436,7 +448,7 @@ def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str]):
         return ""
 
     body_html  = "<body>\n"
-    body_html += '<header><div id="scroller"></div></header>\n'
+    body_html += header()
     body_html += '<div class="content">\n'
     body_html += content
     body_html += "</div>\n"
@@ -604,6 +616,8 @@ if __name__ == "__main__":
     # Load templates
     status("\nLoading template files:")
     main_css    = read_template(f"{config.templates}/main.css", optional=False)
+    light_css   = read_template(f"{config.templates}/light.css", optional=False)
+    dark_css    = read_template(f"{config.templates}/dark.css", optional=False)
     head_html   = read_template(f"{config.templates}/head.html", optional=False)
     footer_html = read_template(f"{config.templates}/footer.html", optional=False)
 
@@ -616,6 +630,8 @@ if __name__ == "__main__":
     head_html   = replace_placeholders(head_html, meta_json)
     footer_html = replace_placeholders(footer_html, meta_json)
     main_css    = replace_placeholders(main_css, style_json)
+    light_css   = replace_placeholders(light_css, style_json)
+    dark_css    = replace_placeholders(dark_css, style_json)
     news_page   = build_news_page(news_json, auto_links_json)
     pubs_page   = build_pubs_page(pubs_json, auto_links_json)
     index_page  = build_index(
@@ -628,6 +644,8 @@ if __name__ == "__main__":
     write_file(f"{config.target}/news.html", news_page)
     write_file(f"{config.target}/pubs.html", pubs_page)
     write_file(f"{config.target}/main.css", main_css)
+    write_file(f"{config.target}/light.css", light_css)
+    write_file(f"{config.target}/dark.css", dark_css)
 
     # Got to here means everything went well
     msg = f"Open {config.target}/index.html in your browser to see your website!"
