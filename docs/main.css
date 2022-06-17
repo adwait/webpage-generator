@@ -265,11 +265,11 @@ input {
 }
 
 input:checked + .slider {
-    background-color: #00A598;
+    background-color: dimgray;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #00A598;
+    box-shadow: 0 0 1px dimgray;
 }
 
 input:checked + .slider:before {
