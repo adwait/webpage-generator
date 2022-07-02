@@ -147,15 +147,6 @@ a {
     width: calc(90% - (75px + 20px + 20px));
 }
 
-.paper-title, .paper-authors, .paper-conference {
-    overflow: hidden;
-    word-wrap: break-word;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.3;
-    max-height: 1.3;
-}
-
 .paper-icons {
     float: right;
     width: 75px;
@@ -181,8 +172,21 @@ a {
   clear: both;
 }
 
+.smallscreen {
+    display: none;
+}
+.bigscreen {
+    display: revert;
+}
+
 /* Special Stuff For Small Screens */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 815px) {
+    .bigscreen {
+        display: none;
+    }
+    .smallscreen {
+        display: revert;
+    }
 
     .paper {
         display: list-item;

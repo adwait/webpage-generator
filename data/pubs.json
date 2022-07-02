@@ -2,7 +2,7 @@
     {
         "title"     : "UCLID5: Multi-Modal Formal Modeling, Verification, and Synthesis",
         "conference": "CAV '22",
-        "authors"   : "E. Polgreen, K. Cheang, P. Gaddamadugu, A. Godbole, K. Laeufer, S. Lin, Y. Manerkar, F. Mora, and S. Seshia",
+        "authors"   : "E. Polgreen, K. Cheang, P. Gaddamadugu, A. Godbole, <br class=\"bigscreen\">K. Laeufer, S. Lin, Y. Manerkar, F. Mora, and S. Seshia",
         "link"      : "https://people.eecs.berkeley.edu/~fmora/cav22.pdf",
         "extra"     : "https://github.com/uclid-org/uclid",
         "slides"    : "",
@@ -30,8 +30,8 @@
         "selected"  : false
     },
     {
-        "title"     : "String Theories involving Regular Membership Predicates: From Practice to Theory and Back",
-        "conference": "WORDS '21",
+        "title"     : "String Theories involving Regular Membership Predicates: <br class=\"bigscreen\">From Practice to Theory and Back",
+        "conference": "<div  class=\"bigscreen\"><small>WORDS '21</small></div><div class=\"smallscreen\">WORDS '21</div>",
         "authors"   : "M. Berzish, J. Day, V. Ganesh, M. Kulczynski, F. Manea, F. Mora, and D. Nowotka",
         "link"      : "https://arxiv.org/abs/2105.07220",
         "extra"     : "",
