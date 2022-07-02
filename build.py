@@ -1,4 +1,4 @@
-#!python3
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -616,7 +616,7 @@ if __name__ == "__main__":
     if not is_federicos(meta_json["name"]):
         status("\nPerforming sanity checks:")
         check_cname()
-        check_tracker()
+        check_tracker(meta_json["tracker"])
 
     # Load templates
     status("\nLoading template files:")
