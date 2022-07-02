@@ -5,12 +5,15 @@ import sys
 import json
 import inspect
 import subprocess
+import collections
 
 from typing import Dict, List
 from datetime import datetime
-from xmlrpc.client import Boolean
 
-from faws.config import Config
+Config = collections.namedtuple(
+    "Config", ["verbosity", "prefix", "target", "templates"]
+)
+
 
 
 def cleanup():
@@ -402,7 +405,7 @@ def build_index(
     news_json    : List[Dict[str, str]],
     pubs_json    : List[Dict[str, str]],
     links        : Dict[str, str],
-    has_dark     : Boolean
+    has_dark     : bool
 ):
     body_html  = "<body>\n"
     body_html += header(has_dark)
@@ -423,7 +426,7 @@ def build_index(
     return inspect.cleandoc(add_links(index_page, links))
 
 
-def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: Boolean):
+def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool):
     content = build_news(news_json, len(news_json), True)
 
     if content == "":
@@ -446,7 +449,7 @@ def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_
     return inspect.cleandoc(add_links(news_html, links))
 
 
-def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: Boolean):
+def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool):
     content = build_pubs(pubs_json, True)
 
     if content == "":
