@@ -15,7 +15,6 @@ Config = collections.namedtuple(
 )
 
 
-
 def cleanup():
     for f in [
         f"{config.target}/index.html",
@@ -189,6 +188,7 @@ def replace_placeholders(text: str, map: Dict[str, str]):
 
 # Define functions for website pieces
 
+
 def header(has_dark):
     if has_dark:
         button = """<label class="switch-mode">
@@ -200,8 +200,9 @@ def header(has_dark):
     else:
         button = ""
 
-    out = "<header><div id=\"scroller\"></div>\n%s</header>\n" % button
+    out = '<header><div id="scroller"></div>\n%s</header>\n' % button
     return out
+
 
 def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
     if count > len(news):
@@ -405,7 +406,7 @@ def build_index(
     news_json    : List[Dict[str, str]],
     pubs_json    : List[Dict[str, str]],
     links        : Dict[str, str],
-    has_dark     : bool
+    has_dark     : bool,
 ):
     body_html  = "<body>\n"
     body_html += header(has_dark)
@@ -426,7 +427,9 @@ def build_index(
     return inspect.cleandoc(add_links(index_page, links))
 
 
-def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool):
+def build_news_page(
+    news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool
+):
     content = build_news(news_json, len(news_json), True)
 
     if content == "":
@@ -449,7 +452,9 @@ def build_news_page(news_json: List[Dict[str, str]], links: Dict[str, str], has_
     return inspect.cleandoc(add_links(news_html, links))
 
 
-def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool):
+def build_pubs_page(
+    pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool
+):
     content = build_pubs(pubs_json, True)
 
     if content == "":
@@ -474,10 +479,10 @@ def build_pubs_page(pubs_json: List[Dict[str, str]], links: Dict[str, str], has_
 
 if __name__ == "__main__":
     config = Config(
-        verbosity= int(sys.argv[1]) if len(sys.argv) > 1 else 0,
-        prefix   = os.path.dirname(__file__),
-        target   = "docs",
-        templates= "templates",
+        verbosity = int(sys.argv[1]) if len(sys.argv) > 1 else 0,
+        prefix    = os.path.dirname(__file__),
+        target    = "docs",
+        templates = "templates",
     )
 
     cleanup()
@@ -486,22 +491,16 @@ if __name__ == "__main__":
     status("Loading json files:")
 
     meta_json = read_data("data/meta.json", optional=False)
+    fail_if_not("name" in meta_json, 'Must include a "name" in data/meta.json!')
     fail_if_not(
-        "name" in meta_json,
-        'Must include a "name" in data/meta.json!')
-    fail_if_not(
-        "description" in meta_json,
-        'Must include a "description" in data/meta.json!'
+        "description" in meta_json, 'Must include a "description" in data/meta.json!'
     )
-    fail_if_not(
-        "favicon" in meta_json, 
-        'Must include a "favicon" in data/meta.json!')
+    fail_if_not("favicon" in meta_json, 'Must include a "favicon" in data/meta.json!')
     fill_if_missing(meta_json, "tracker")
 
     style_json = read_data("data/style.json", optional=False)
     fail_if_not(
-        "font-color" in style_json, 
-        'Must include a "font-color" in data/style.json!'
+        "font-color" in style_json, 'Must include a "font-color" in data/style.json!'
     )
     fail_if_not(
         "background-color" in style_json,
@@ -524,27 +523,24 @@ if __name__ == "__main__":
         'Must include a "divider-color" in data/style.json!',
     )
     fail_if_not(
-        "paper-img" in style_json,
-        'Must include a "paper-img" in data/style.json!'
+        "paper-img" in style_json, 'Must include a "paper-img" in data/style.json!'
     )
     fail_if_not(
-        "extra-img" in style_json,
-        'Must include a "extra-img" in data/style.json!'
+        "extra-img" in style_json, 'Must include a "extra-img" in data/style.json!'
     )
     fail_if_not(
-        "slides-img" in style_json,
-        'Must include a "slides-img" in data/style.json!'
+        "slides-img" in style_json, 'Must include a "slides-img" in data/style.json!'
     )
 
-    fill_if_missing(style_json, "font-color-dark",       style_json["font-color"])
+    fill_if_missing(style_json, "font-color-dark", style_json["font-color"])
     fill_if_missing(style_json, "background-color-dark", style_json["background-color"])
-    fill_if_missing(style_json, "header-color-dark",     style_json["header-color"])
-    fill_if_missing(style_json, "accent-color-dark",     style_json["accent-color"])
+    fill_if_missing(style_json, "header-color-dark", style_json["header-color"])
+    fill_if_missing(style_json, "accent-color-dark", style_json["accent-color"])
     fill_if_missing(style_json, "link-hover-color-dark", style_json["link-hover-color"])
-    fill_if_missing(style_json, "divider-color-dark",    style_json["divider-color"])
-    fill_if_missing(style_json, "paper-img-dark",        style_json["paper-img"])
-    fill_if_missing(style_json, "extra-img-dark",        style_json["extra-img"])
-    fill_if_missing(style_json, "slides-img-dark",       style_json["slides-img"])
+    fill_if_missing(style_json, "divider-color-dark", style_json["divider-color"])
+    fill_if_missing(style_json, "paper-img-dark", style_json["paper-img"])
+    fill_if_missing(style_json, "extra-img-dark", style_json["extra-img"])
+    fill_if_missing(style_json, "slides-img-dark", style_json["slides-img"])
 
     profile_json = read_data("data/profile.json", optional=False)
     fail_if_not(
@@ -552,15 +548,11 @@ if __name__ == "__main__":
         'Must include a "headshot" field in data/profile.json!',
     )
     fail_if_not(
-        "blurb" in profile_json, 
-        'Must include a "blurb" field in data/profile.json!'
+        "blurb" in profile_json, 'Must include a "blurb" field in data/profile.json!'
     )
+    fail_if_not("cv" in profile_json, 'Must include a "cv" field in data/profile.json!')
     fail_if_not(
-        "cv" in profile_json, 
-        'Must include a "cv" field in data/profile.json!')
-    fail_if_not(
-        "email" in profile_json, 
-        'Must include a "email" field in data/profile.json!'
+        "email" in profile_json, 'Must include a "email" field in data/profile.json!'
     )
     fail_if_not(
         "scholar" in profile_json,
