@@ -8,6 +8,7 @@
     "paper-img": "images/paper.png",
     "extra-img": "images/extra.png",
     "slides-img": "images/slides.png",
+    "bibtex-img": "images/bibtex.png",
 
     "font-color-dark": "#EEEEEE",
     "background-color-dark": "black",
@@ -17,5 +18,6 @@
     "divider-color-dark": "#AAAAAA",
     "paper-img-dark": "images/paper-dark.png",
     "extra-img-dark": "images/extra-dark.png",
-    "slides-img-dark": "images/slides-dark.png"
+    "slides-img-dark": "images/slides-dark.png",
+    "bibtex-img-dark": "images/bibtex-dark.png"
 }

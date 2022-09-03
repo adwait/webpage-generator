@@ -310,6 +310,14 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
                 if p["slides"]
                 else ""
             )
+            item += (
+                '<a href="'
+                + p["bibtex"]
+                + '" alt="[Bibtex] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
+                % (style_json["bibtex-img"], style_json["bibtex-img-dark"])
+                if p["bibtex"]
+                else ""
+            )
             item += "</div>\n"  # close paper-icons
             item += "</div>\n"  # close paper-flex
             item += "</div>\n"  # close paper
@@ -531,6 +539,9 @@ if __name__ == "__main__":
     fail_if_not(
         "slides-img" in style_json, 'Must include a "slides-img" in data/style.json!'
     )
+    fail_if_not(
+        "bibtex-img" in style_json, 'Must include a "bibtex-img" in data/style.json!'
+    )
 
     fill_if_missing(style_json, "font-color-dark", style_json["font-color"])
     fill_if_missing(style_json, "background-color-dark", style_json["background-color"])
@@ -541,6 +552,7 @@ if __name__ == "__main__":
     fill_if_missing(style_json, "paper-img-dark", style_json["paper-img"])
     fill_if_missing(style_json, "extra-img-dark", style_json["extra-img"])
     fill_if_missing(style_json, "slides-img-dark", style_json["slides-img"])
+    fill_if_missing(style_json, "bibtex-img-dark", style_json["bibtex-img"])
 
     profile_json = read_data("data/profile.json", optional=False)
     fail_if_not(

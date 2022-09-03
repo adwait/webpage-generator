@@ -3,9 +3,10 @@
         "title"     : "UCLID5: Multi-Modal Formal Modeling, Verification, and Synthesis",
         "conference": "CAV '22",
         "authors"   : "E. Polgreen, K. Cheang, P. Gaddamadugu, A. Godbole, <br class=\"bigscreen\">K. Laeufer, S. Lin, Y. Manerkar, F. Mora, and S. Seshia",
-        "link"      : "https://people.eecs.berkeley.edu/~fmora/cav22.pdf",
+        "link"      : "https://arxiv.org/abs/2208.03699",
         "extra"     : "https://github.com/uclid-org/uclid",
         "slides"    : "https://easychair.org/smart-slide/slide/SJtw",
+        "bibtex"    : "https://dblp.org/rec/conf/cav/PolgreenCGGLLMM22.html?view=bibtex",
         "section"   : "Refereed Workshop, Short & Tool Papers",
         "selected"  : true
     },
@@ -16,6 +17,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/fm21a.pdf",
         "extra"     : "https://z3str4.github.io/",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/fm21a_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/conf/fm/MoraBKNG21.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : true
     },
@@ -25,7 +27,8 @@
         "authors"   : "J. Scott, H. Rehman, T. Sudula, F. Mora, and V. Ganesh",
         "link"      : "https://people.eecs.berkeley.edu/~fmora/fm21b.pdf",
         "extra"     : "",
-        "slides"    : "",
+        "slides"    : "https://www.youtube.com/watch?v=TS0E534MntA",
+        "bibtex"    : "https://dblp.org/rec/conf/fm/ScottSRMG21.html?view=bibtex",
         "section"   : "Refereed Workshop, Short & Tool Papers",
         "selected"  : false
     },
@@ -35,7 +38,8 @@
         "authors"   : "M. Berzish, J. Day, V. Ganesh, M. Kulczynski, F. Manea, F. Mora, and D. Nowotka",
         "link"      : "https://arxiv.org/abs/2105.07220",
         "extra"     : "",
-        "slides"    : "",
+        "slides"    : "https://drive.univ-rouen.fr/f/9904c77d8d444d00a121/",
+        "bibtex"    : "https://dblp.org/rec/conf/cwords/BerzishDGKMMN21.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : false
     },
@@ -46,6 +50,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/atva21.pdf",
         "extra"     : "https://github.com/MuradAkh/Qicc",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/atva21_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/conf/atva/AkhundovMFHC21.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : false
     },
@@ -56,6 +61,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/sat21.pdf",
         "extra"     : "https://github.com/uclid-org/medley-solver/tree/SAT2021",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/sat21_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/conf/sat/PimpalkhareMPS21.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : true
     },
@@ -66,6 +72,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/cav21.pdf",
         "extra"     : "https://figshare.com/s/5ae73a6f3c55f5c5e4c1",
         "slides"    : "https://ucl-pplv.github.io/CAV21/poster_P_220/",
+        "bibtex"    : "https://dblp.org/rec/conf/cav/BerzishKMMDNG20.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : true
     },
@@ -76,6 +83,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/ase20.pdf",
         "extra"     : "https://github.com/CC24LIFE/CC2",
         "slides"    : "",
+        "bibtex"    : "https://dblp.org/rec/conf/kbse/FengMHC20.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : false
     },
@@ -86,6 +94,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/vstte20.pdf",
         "extra"     : "https://github.com/j29scott/BanditFuzz_Public",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/smt20_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/conf/vstte/ScottMG20.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : false
     },
@@ -96,6 +105,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/synt20.pdf",
         "extra"     : "https://github.com/uclid-org/uclid",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/synt20_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/journals/corr/abs-2007-06760.html?view=bibtex",
         "section"   : "Refereed Workshop, Short & Tool Papers",
         "selected"  : true
     },
@@ -106,6 +116,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/ase18.pdf",
         "extra"     : "https://github.com/Client-Specific-Equivalence-Checker/CLEVER",
         "slides"    : "https://people.eecs.berkeley.edu/~fmora/ase18_presentation.pdf",
+        "bibtex"    : "https://dblp.org/rec/conf/kbse/Mora0RC18.html?view=bibtex",
         "section"   : "Refereed Conference Papers",
         "selected"  : true
     },
@@ -116,6 +127,7 @@
         "link"      : "https://people.eecs.berkeley.edu/~fmora/cav18.pdf",
         "extra"     : "https://github.com/dblotsky/stringfuzz",
         "slides"    : "https://easychair.org/smart-slide/slide/pN13#",
+        "bibtex"    : "https://dblp.org/rec/conf/cav/BlotskyMBZKG18.html?view=bibtex",
         "section"   : "Refereed Workshop, Short & Tool Papers",
         "selected"  : true
     }
