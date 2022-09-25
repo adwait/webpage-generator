@@ -31,12 +31,12 @@ def cleanup():
 # for printing with colours
 class bcolors:
     SUCCESS = "\033[92m"
-    OKCYAN  = "\033[96m"
-    OKBLUE  = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKBLUE = "\033[94m"
     WARNING = "\033[93m"
-    ERROR   = "\033[91m"
-    BOLD    = "\033[1m"
-    ENDC    = "\033[0m"
+    ERROR = "\033[91m"
+    BOLD = "\033[1m"
+    ENDC = "\033[0m"
 
 
 # Helper functions
@@ -44,7 +44,7 @@ def status(msg: str, priority=1):
     if priority <= config.verbosity:
         if priority == 0:
             divider = "*" * len(msg)
-            msg     = f"{divider}\n{msg}\n{divider}"
+            msg = f"{divider}\n{msg}\n{divider}"
             print(f"{bcolors.BOLD}{bcolors.OKBLUE}{msg}{bcolors.ENDC*2}")
         elif priority == 1:
             print(f"{bcolors.BOLD}{bcolors.OKCYAN}{msg}{bcolors.ENDC*2}")
@@ -53,25 +53,25 @@ def status(msg: str, priority=1):
 
 
 def success(msg: str):
-    msg     = f"SUCCESS: {msg}"
+    msg = f"SUCCESS: {msg}"
     divider = "*" * len(msg)
-    msg     = f"{divider}\n{msg}\n{divider}"
+    msg = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.SUCCESS}{msg}{bcolors.ENDC}")
 
 
 def warning(msg: str):
-    msg     = f"WARNING: {msg}"
+    msg = f"WARNING: {msg}"
     divider = "*" * len(msg)
-    msg     = f"{divider}\n{msg}\n{divider}"
+    msg = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.WARNING}{msg}{bcolors.ENDC}")
 
 
 def error(msg: str):
-    msg     = f"ERROR: {msg}"
+    msg = f"ERROR: {msg}"
     divider = "*" * len(msg)
-    msg     = f"{divider}\n{msg}\n{divider}"
+    msg = f"{divider}\n{msg}\n{divider}"
 
     print(f"{bcolors.ERROR}{msg}{bcolors.ENDC}")
     cleanup()
@@ -103,7 +103,7 @@ def is_federicos(name):
     except Exception as _:
         repo_url = ""
 
-    federicos_url  = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
+    federicos_url = "git@github.com:FedericoAureliano/FedericoAureliano.github.io.git"
     federicos_name = "Federico Mora Rocha"
 
     return name == federicos_name and repo_url == federicos_url
@@ -216,7 +216,7 @@ def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
 
     for n in news[:count]:
         status("- " + n["date"])
-        item  = '<div class="news-item">\n'
+        item = '<div class="news-item">\n'
         item += '<div class="news-left">' + n["date"] + "</div>\n"
         item += '<div class="news-right">' + n["text"] + "</div>\n"
         item += "</div>\n"
@@ -274,7 +274,7 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
     for p in pubs:
         if title == p["section"] and (p["selected"] or full):
             status("- " + p["title"])
-            item  = '<div class="paper">\n'
+            item = '<div class="paper">\n'
             item += '<div class="paper-flex">\n'
             item += '<div class="paper-conference">' + p["conference"] + "</div>\n"
             item += '<div class="paper-details">\n'
@@ -323,7 +323,7 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
             item += "</div>\n"  # close paper
             pubs_list += item
 
-    pubs_html  = '<h3 id="%spublications">%s</h3>' % (title, title)
+    pubs_html = '<h3 id="%spublications">%s</h3>' % (title, title)
     pubs_html += pubs_list
 
     return pubs_html
@@ -364,11 +364,11 @@ def build_pubs(pubs: List[Dict[str, str]], full: bool):
 
 
 def build_profile(profile: Dict[str, str]):
-    profile_html  = '<div class="profile">\n'
+    profile_html = '<div class="profile">\n'
     profile_html += (
         '<img class="headshot" src="%s" alt="Headshot"/>\n' % profile["headshot"]
     )
-    profile_html += profile["blurb"]
+    profile_html += "<p>" + "</p><p>".join(profile["blurb"].split("\n")) + "</p>"
     profile_html += "\n<p>Here is my "
     profile_html += '<a href="%s">CV</a> and ' % profile["cv"]
     profile_html += '<a href="%s">Google Scholar</a>. ' % profile["scholar"]
@@ -377,6 +377,36 @@ def build_profile(profile: Dict[str, str]):
     profile_html += "</div>\n"  # close profile
 
     return profile_html
+
+
+def add_notes(html: str, notes: Dict[str, str]):
+    status("\nAdding notes:", 2)
+
+    toreplace = sorted(notes.keys(), key=len, reverse=True)
+
+    for name in toreplace:
+        pos = html.find(name)
+        while pos != -1:
+            prefix = html[:pos]
+            suffix = html[pos:]
+
+            open = html[:pos].count("<abbr title=")
+            close = html[:pos].count("</abbr>")
+
+            status(f"- {name} {pos} {open} {close}", 2)
+            target = name + " "
+            if pos >= 0 and open == close:
+                target = '<abbr title="%s">%s</abbr>' % (notes[name], name)
+                suffix = suffix.replace(name, target, 1)
+                html = prefix + suffix
+
+            start = (len(prefix) - len(name)) + len(
+                target
+            )  # we got rid of name and replaced it with target
+            tmp = html[start:].find(name)
+            pos = tmp + start if tmp >= 0 else tmp
+
+    return html
 
 
 def add_links(html: str, links: Dict[str, str]):
@@ -390,7 +420,7 @@ def add_links(html: str, links: Dict[str, str]):
             prefix = html[:pos]
             suffix = html[pos:]
 
-            open  = html[:pos].count("<a href=")
+            open = html[:pos].count("<a href=")
             close = html[:pos].count("</a>")
 
             status(f"- {name} {pos} {open} {close}", 2)
@@ -398,7 +428,7 @@ def add_links(html: str, links: Dict[str, str]):
             if pos >= 0 and open == close:
                 target = '<a href="%s">%s</a>' % (links[name], name)
                 suffix = suffix.replace(name, target, 1)
-                html   = prefix + suffix
+                html = prefix + suffix
 
             start = (len(prefix) - len(name)) + len(
                 target
@@ -410,13 +440,14 @@ def add_links(html: str, links: Dict[str, str]):
 
 
 def build_index(
-    profile_json : Dict[str, str],
-    news_json    : List[Dict[str, str]],
-    pubs_json    : List[Dict[str, str]],
-    links        : Dict[str, str],
-    has_dark     : bool,
+    profile_json: Dict[str, str],
+    news_json: List[Dict[str, str]],
+    pubs_json: List[Dict[str, str]],
+    links: Dict[str, str],
+    notes: Dict[str, str],
+    has_dark: bool,
 ):
-    body_html  = "<body>\n"
+    body_html = "<body>\n"
     body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
@@ -426,24 +457,27 @@ def build_index(
     body_html += footer_html
     body_html += "</body>\n"
 
-    index_page  = "<!DOCTYPE html>\n"
+    index_page = "<!DOCTYPE html>\n"
     index_page += '<html lang="en">\n'
     index_page += head_html + "\n\n"
-    index_page += body_html
+    index_page += add_notes(add_links(body_html, links), notes)
     index_page += "</html>\n"
 
-    return inspect.cleandoc(add_links(index_page, links))
+    return inspect.cleandoc(index_page)
 
 
 def build_news_page(
-    news_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool
+    news_json: List[Dict[str, str]],
+    links: Dict[str, str],
+    notes: Dict[str, str],
+    has_dark: bool,
 ):
     content = build_news(news_json, len(news_json), True)
 
     if content == "":
         return ""
 
-    body_html  = "<body>\n"
+    body_html = "<body>\n"
     body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += content
@@ -451,24 +485,27 @@ def build_news_page(
     body_html += footer_html
     body_html += "</body>\n"
 
-    news_html  = "<!DOCTYPE html>\n"
+    news_html = "<!DOCTYPE html>\n"
     news_html += '<html lang="en">\n'
     news_html += head_html + "\n\n"
-    news_html += body_html
+    news_html += add_notes(add_links(body_html, links), notes)
     news_html += "</html>\n"
 
-    return inspect.cleandoc(add_links(news_html, links))
+    return inspect.cleandoc(news_html)
 
 
 def build_pubs_page(
-    pubs_json: List[Dict[str, str]], links: Dict[str, str], has_dark: bool
+    pubs_json: List[Dict[str, str]],
+    links: Dict[str, str],
+    notes: Dict[str, str],
+    has_dark: bool,
 ):
     content = build_pubs(pubs_json, True)
 
     if content == "":
         return ""
 
-    body_html  = "<body>\n"
+    body_html = "<body>\n"
     body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += content
@@ -476,21 +513,21 @@ def build_pubs_page(
     body_html += footer_html
     body_html += "</body>\n"
 
-    pubs_html  = "<!DOCTYPE html>\n"
+    pubs_html = "<!DOCTYPE html>\n"
     pubs_html += '<html lang="en">\n'
     pubs_html += head_html + "\n\n"
-    pubs_html += body_html
+    pubs_html += add_notes(add_links(body_html, links), notes)
     pubs_html += "</html>\n"
 
-    return inspect.cleandoc(add_links(pubs_html, links))
+    return inspect.cleandoc(pubs_html)
 
 
 if __name__ == "__main__":
     config = Config(
-        verbosity = int(sys.argv[1]) if len(sys.argv) > 1 else 0,
-        prefix    = os.path.dirname(__file__),
-        target    = "docs",
-        templates = "templates",
+        verbosity=int(sys.argv[1]) if len(sys.argv) > 1 else 0,
+        prefix=os.path.dirname(__file__),
+        target="docs",
+        templates="templates",
     )
 
     cleanup()
@@ -618,6 +655,7 @@ if __name__ == "__main__":
         )
 
     auto_links_json = read_data("data/auto_links.json", optional=True)
+    auto_notes_json = read_data("data/auto_notes.json", optional=True)
 
     # Sanity checks
     if not is_federicos(meta_json["name"]):
@@ -627,12 +665,12 @@ if __name__ == "__main__":
 
     # Load templates
     status("\nLoading template files:")
-    main_css    = read_template(f"{config.templates}/main.css", optional=False)
-    light_css   = read_template(f"{config.templates}/light.css", optional=False)
-    dark_css    = read_template(f"{config.templates}/dark.css", optional=True)
-    dark_css    = light_css if dark_css == "" else dark_css
-    has_dark    = light_css != dark_css
-    head_html   = read_template(f"{config.templates}/head.html", optional=False)
+    main_css = read_template(f"{config.templates}/main.css", optional=False)
+    light_css = read_template(f"{config.templates}/light.css", optional=False)
+    dark_css = read_template(f"{config.templates}/dark.css", optional=True)
+    dark_css = light_css if dark_css == "" else dark_css
+    has_dark = light_css != dark_css
+    head_html = read_template(f"{config.templates}/head.html", optional=False)
     footer_html = read_template(f"{config.templates}/footer.html", optional=False)
 
     if is_federicos(meta_json["name"]):
@@ -641,15 +679,15 @@ if __name__ == "__main__":
         footer_html = "\n" + footer_html
 
     # Create HTML and CSS
-    head_html   = replace_placeholders(head_html, meta_json)
+    head_html = replace_placeholders(head_html, meta_json)
     footer_html = replace_placeholders(footer_html, meta_json)
-    main_css    = replace_placeholders(main_css, style_json)
-    light_css   = replace_placeholders(light_css, style_json)
-    dark_css    = replace_placeholders(dark_css, style_json)
-    news_page   = build_news_page(news_json, auto_links_json, has_dark)
-    pubs_page   = build_pubs_page(pubs_json, auto_links_json, has_dark)
-    index_page  = build_index(
-        profile_json, news_json, pubs_json, auto_links_json, has_dark
+    main_css = replace_placeholders(main_css, style_json)
+    light_css = replace_placeholders(light_css, style_json)
+    dark_css = replace_placeholders(dark_css, style_json)
+    news_page = build_news_page(news_json, auto_links_json, auto_notes_json, has_dark)
+    pubs_page = build_pubs_page(pubs_json, auto_links_json, auto_notes_json, has_dark)
+    index_page = build_index(
+        profile_json, news_json, pubs_json, auto_links_json, auto_notes_json, has_dark
     )
 
     # Write to files
