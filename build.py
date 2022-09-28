@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import sys
 import json
 import inspect
@@ -265,6 +266,63 @@ def some_not_selected(pubs: List[Dict[str, str]]):
     return False
 
 
+def build_authors(authors):
+    item = '<div class="paper-authors">\n'
+
+    authors_split = re.split(", and |, | and ", authors)
+    for i in range(len(authors_split)):
+        entry = authors_split[i]
+        if i < len(authors_split) - 2:
+            entry += ",\n"
+        if i == len(authors_split) - 2:
+            entry += " and\n"
+        authors_split[i] = entry
+
+    if len(authors) > 80:
+        authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
+    item += "".join(authors_split)
+    item += "</div>\n"  # close paper-authors
+    return item
+
+
+def build_icons(p):
+    item = '<div class="paper-icons">\n'
+    item += (
+        '<a href="'
+        + p["link"]
+        + '" alt="[PDF] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
+        % (style_json["paper-img"], style_json["paper-img-dark"])
+        if p["link"]
+        else ""
+    )
+    item += (
+        '<a href="'
+        + p["extra"]
+        + '" alt="[Extra] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
+        % (style_json["extra-img"], style_json["extra-img-dark"])
+        if p["extra"]
+        else ""
+    )
+    item += (
+        '<a href="'
+        + p["slides"]
+        + '" alt="[Slides] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
+        % (style_json["slides-img"], style_json["slides-img-dark"])
+        if p["slides"]
+        else ""
+    )
+    item += (
+        '<a href="'
+        + p["bibtex"]
+        + '" alt="[Bibtex] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
+        % (style_json["bibtex-img"], style_json["bibtex-img-dark"])
+        if p["bibtex"]
+        else ""
+    )
+    item += "</div>\n"  # close paper-icons
+    return item
+
+
 def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
     if title == "":
         return ""
@@ -276,49 +334,20 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
             status("- " + p["title"])
             item = '<div class="paper">\n'
             item += '<div class="paper-flex">\n'
-            item += '<div class="paper-conference">' + p["conference"] + "</div>\n"
+            conference = p["conference"]
+            if len(p["conference"]) > 8:
+                conference = f'<div class="bigscreen"><small>{conference}</small></div><div class="smallscreen">{conference}</div>'
+            item += '<div class="paper-conference">' + conference + "</div>\n"
             item += '<div class="paper-details">\n'
-            item += '<div class="paper-title">' + p["title"] + "</div>\n"
-            item += (
-                '<div class="paper-authors">'
-                + ",\n".join(p["authors"].split(", "))
-                + "</div>\n"
-            )
+            item += '<div class="paper-title">'
+            title_split = p["title"].split()
+            if len(p["title"]) >= 80:
+                title_split.insert(len(title_split) // 2, '<br class="bigscreen">')
+            item += " ".join(title_split)
+            item += "</div>\n"
+            item += build_authors(p["authors"])
             item += "</div>\n"  # close paper-details
-            item += '<div class="paper-icons">\n'
-            item += (
-                '<a href="'
-                + p["link"]
-                + '" alt="[PDF] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
-                % (style_json["paper-img"], style_json["paper-img-dark"])
-                if p["link"]
-                else ""
-            )
-            item += (
-                '<a href="'
-                + p["extra"]
-                + '" alt="[Extra] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
-                % (style_json["extra-img"], style_json["extra-img-dark"])
-                if p["extra"]
-                else ""
-            )
-            item += (
-                '<a href="'
-                + p["slides"]
-                + '" alt="[Slides] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
-                % (style_json["slides-img"], style_json["slides-img-dark"])
-                if p["slides"]
-                else ""
-            )
-            item += (
-                '<a href="'
-                + p["bibtex"]
-                + '" alt="[Bibtex] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
-                % (style_json["bibtex-img"], style_json["bibtex-img-dark"])
-                if p["bibtex"]
-                else ""
-            )
-            item += "</div>\n"  # close paper-icons
+            item += build_icons(p)
             item += "</div>\n"  # close paper-flex
             item += "</div>\n"  # close paper
             pubs_list += item
