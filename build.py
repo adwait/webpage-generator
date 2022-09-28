@@ -269,7 +269,15 @@ def some_not_selected(pubs: List[Dict[str, str]]):
 def build_authors(authors):
     item = '<div class="paper-authors">\n'
 
-    authors_split = re.split(", and |, | and ", authors)
+    authors_split = [
+        "%s%s%s"
+        % (
+            a["first"][0] + ". ",
+            a["middle"][0] + ". " if "middle" in a and a["middle"] else "",
+            a["last"],
+        )
+        for a in authors
+    ]
     for i in range(len(authors_split)):
         entry = authors_split[i]
         if i < len(authors_split) - 2:
@@ -278,7 +286,7 @@ def build_authors(authors):
             entry += " and\n"
         authors_split[i] = entry
 
-    if len(authors) > 80:
+    if len("".join(authors_split)) > 80:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
     item += "</div>\n"  # close paper-authors
@@ -334,8 +342,8 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
             status("- " + p["title"])
             item = '<div class="paper">\n'
             item += '<div class="paper-flex">\n'
-            conference = p["conference"]
-            if len(p["conference"]) > 8:
+            conference = p["venue"]["short"] + " '" + p["year"][-2:]
+            if len(conference) > 8:
                 conference = f'<div class="bigscreen"><small>{conference}</small></div><div class="smallscreen">{conference}</div>'
             item += '<div class="paper-conference">' + conference + "</div>\n"
             item += '<div class="paper-details">\n'
@@ -397,7 +405,9 @@ def build_profile(profile: Dict[str, str]):
     profile_html += (
         '<img class="headshot" src="%s" alt="Headshot"/>\n' % profile["headshot"]
     )
-    profile_html += "<p>" + "</p><p>".join(profile["blurb"].split("\n")) + "</p>"
+    profile_html += "<p>" + "</p><p>".join(profile["about"].split("\n")) + "</p>"
+    if "research" in profile:
+        profile_html += "<p>" + "</p><p>".join(profile["research"].split("\n")) + "</p>"
     profile_html += "\n<p>Here is my "
     profile_html += '<a href="%s">CV</a> and ' % profile["cv"]
     profile_html += '<a href="%s">Google Scholar</a>. ' % profile["scholar"]
@@ -626,7 +636,8 @@ if __name__ == "__main__":
         'Must include a "headshot" field in data/profile.json!',
     )
     fail_if_not(
-        "blurb" in profile_json, 'Must include a "blurb" field in data/profile.json!'
+        "about" in profile_json,
+        'Must include a "about" field in data/profile.json!',
     )
     fail_if_not("cv" in profile_json, 'Must include a "cv" field in data/profile.json!')
     fail_if_not(
@@ -655,19 +666,27 @@ if __name__ == "__main__":
         "The dates in data/news.json are not in order.",
     )
 
-    pubs_json = read_data("data/pubs.json", optional=True)
+    pubs_json = read_data("data/publications.json", optional=True)
     for pub in pubs_json:
         fail_if_not(
             "title" in pub,
-            'Must include a "title" field for each pub in data/pubs.json!',
+            'Must include a "title" field for each pub in data/publications.json!',
         )
         fail_if_not(
-            "conference" in pub,
-            'Must include a "conference" field for each pub in data/pubs.json!',
+            "venue" in pub,
+            'Must include a "venue" field for each pub in data/publications.json!',
+        )
+        fail_if_not(
+            "short" in pub["venue"],
+            'Must include a "short" subfield for each pub venue in data/publications.json!',
+        )
+        fail_if_not(
+            "name" in pub["venue"],
+            'Must include a "name" subfield for each pub venue in data/publications.json!',
         )
         fail_if_not(
             "authors" in pub,
-            'Must include a "authors" field for each pub in data/pubs.json!',
+            'Must include a "authors" field for each pub in data/publications.json!',
         )
 
         fill_if_missing(pub, "link")
@@ -676,11 +695,11 @@ if __name__ == "__main__":
 
         fail_if_not(
             "section" in pub,
-            'Must include a "section" field for each pub in data/pubs.json!',
+            'Must include a "section" field for each pub in data/publications.json!',
         )
         fail_if_not(
             "selected" in pub,
-            'Must include a "selected" field for each pub in data/pubs.json!',
+            'Must include a "selected" field for each pub in data/publications.json!',
         )
 
     auto_links_json = read_data("data/auto_links.json", optional=True)

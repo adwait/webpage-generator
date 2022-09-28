@@ -9,7 +9,8 @@ Please replace all my data with your data.
 
 **profile.json**
 - ```headshot```: a picture of yourself, usually saved in ```docs/images/```.
-- ```blurb```: text that will surround your headshot.
+- ```background```: text that will surround your headshot.
+- ```research```: text that will surround your headshot.
 - ```cv```:  link to your CV.
 - ```email```: your email address.
 - ```scholar```: a link to your Google Scholar profile.
