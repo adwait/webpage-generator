@@ -217,11 +217,11 @@ def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
 
     for n in news[:count]:
         status("- " + n["date"])
-        item = '<div class="news-item">\n'
-        item += '<div class="news-left">' + n["date"] + "</div>\n"
-        item += '<div class="news-right">' + n["text"] + "</div>\n"
-        item += "</div>\n"
-        news_list += item
+        news_map = {
+            "news-date": n["date"],
+            "news-text": n["text"],
+        }
+        news_list += replace_placeholders(news_item_html, news_map)
 
     news_html = '<div class="section">\n'
 
@@ -267,7 +267,7 @@ def some_not_selected(pubs: List[Dict[str, str]]):
 
 
 def build_authors(authors):
-    item = '<div class="paper-authors">\n'
+    item = ""
 
     authors_split = [
         "%s%s%s"
@@ -289,12 +289,11 @@ def build_authors(authors):
     if len("".join(authors_split)) > 80:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
-    item += "</div>\n"  # close paper-authors
     return item
 
 
 def build_icons(p):
-    item = '<div class="paper-icons">\n'
+    item = ""
     item += (
         '<a href="'
         + p["link"]
@@ -327,7 +326,6 @@ def build_icons(p):
         if p["bibtex"]
         else ""
     )
-    item += "</div>\n"  # close paper-icons
     return item
 
 
@@ -340,25 +338,23 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
     for p in pubs:
         if title == p["section"] and (p["selected"] or full):
             status("- " + p["title"])
-            item = '<div class="paper">\n'
-            item += '<div class="paper-flex">\n'
-            conference = p["venue"]["short"] + " '" + p["year"][-2:]
-            if len(conference) > 8:
-                conference = f'<div class="bigscreen"><small>{conference}</small></div><div class="smallscreen">{conference}</div>'
-            item += '<div class="paper-conference">' + conference + "</div>\n"
-            item += '<div class="paper-details">\n'
-            item += '<div class="paper-title">'
+
+            paper_conference = p["venue"]["short"] + " '" + p["year"][-2:]
+            if len(paper_conference) > 8:
+                paper_conference = f'<div class="bigscreen"><small>{paper_conference}</small></div><div class="smallscreen">{paper_conference}</div>'
+
             title_split = p["title"].split()
             if len(p["title"]) >= 80:
                 title_split.insert(len(title_split) // 2, '<br class="bigscreen">')
-            item += " ".join(title_split)
-            item += "</div>\n"
-            item += build_authors(p["authors"])
-            item += "</div>\n"  # close paper-details
-            item += build_icons(p)
-            item += "</div>\n"  # close paper-flex
-            item += "</div>\n"  # close paper
-            pubs_list += item
+            paper_title = " ".join(title_split)
+
+            paper_map = {
+                "paper-title": paper_title,
+                "paper-authors": build_authors(p["authors"]),
+                "paper-conference": paper_conference,
+                "paper-icons": build_icons(p),
+            }
+            pubs_list += replace_placeholders(paper_html, paper_map)
 
     pubs_html = '<h3 id="%spublications">%s</h3>' % (title, title)
     pubs_html += pubs_list
@@ -720,6 +716,8 @@ if __name__ == "__main__":
     has_dark = light_css != dark_css
     head_html = read_template(f"{config.templates}/head.html", optional=False)
     footer_html = read_template(f"{config.templates}/footer.html", optional=False)
+    paper_html = read_template(f"{config.templates}/paper.html", optional=False)
+    news_item_html = read_template(f"{config.templates}/news-item.html", optional=False)
 
     if is_federicos(meta_json["name"]):
         footer_html = """\n<footer>\n<p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>\n</footer>\n"""
