@@ -1,5 +1,9 @@
 [
     {
+        "date": "08/2022",
+        "text": "<a href=\"https://easychair.org/smart-slide/slide/SJtw#\">Elizabeth presented</a> our paper on UCLID5 at CAV '22"
+    },
+    {
         "date": "06/2022",
         "text": "I contributed <a href=\"https://people.eecs.berkeley.edu/~sseshia/ssft2022/ssft22_bootcamp_uclid5.pdf\"> a verification excercise</a> to the Eleventh Summer School on Formal Techniques bootcamp"
     },
