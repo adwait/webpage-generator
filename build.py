@@ -286,7 +286,7 @@ def build_authors(authors):
             entry += " and\n"
         authors_split[i] = entry
 
-    if len("".join(authors_split)) > 80:
+    if len("".join(authors_split)) > 75:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
     return item
@@ -344,7 +344,7 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
                 paper_conference = f'<div class="bigscreen"><small>{paper_conference}</small></div><div class="smallscreen">{paper_conference}</div>'
 
             title_split = p["title"].split()
-            if len(p["title"]) >= 80:
+            if len(p["title"]) > 75:
                 title_split.insert(len(title_split) // 2, '<br class="bigscreen">')
             paper_title = " ".join(title_split)
 

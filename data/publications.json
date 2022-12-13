@@ -1,4 +1,53 @@
-[
+[    {
+        "title": "Towards more efficient methods for solving regular-expression heavy string constraints",
+        "year": "2022",
+        "venue": {
+            "name": "Theoretical Computer Science",
+            "short": "TCS"
+        },        "authors": [
+            {
+                "first": "Murphy",
+                "middle": "",
+                "last": "Berzish"
+            },
+            {
+                "first": "Joel",
+                "middle": "",
+                "last": "Day"
+            },
+            {
+                "first": "Vijay",
+                "middle": "",
+                "last": "Ganesh"
+            },
+            {
+                "first": "Mitja",
+                "middle": "",
+                "last": "Kulczynski"
+            },
+            {
+                "first": "Florin",
+                "middle": "",
+                "last": "Manea"
+            },
+            {
+                "first": "Federico",
+                "middle": "",
+                "last": "Mora"
+            },
+            {
+                "first": "Drik",
+                "middle": "",
+                "last": "Nowotka"
+            }
+        ],
+        "link": "https://www.sciencedirect.com/science/article/pii/S030439752200723X",
+        "extra": "",
+        "slides": "",
+        "bibtex": "",
+        "section": "Refereed Journal Publications",
+        "selected": false
+    },
     {
         "title": "UCLID5: Multi-Modal Formal Modeling, Verification, and Synthesis",
         "year": "2022",
