@@ -250,10 +250,11 @@ def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
 
 
 # Helper function to decide what publication sections to include
-def get_pub_titles(pubs: List[Dict[str, str]]):
+def get_pub_titles(pubs: List[Dict[str, str]], full: bool):
     titles = set()
     for p in pubs:
-        titles.add(p["section"])
+        if p["selected"] or full:
+            titles.add(p["section"])
 
     return sorted(list(titles))
 
@@ -384,7 +385,7 @@ def build_pubs(pubs: List[Dict[str, str]], full: bool):
     pubs_html += '<div class="hbar"></div>\n'
     pubs_html += '<div id="publications">\n'
 
-    titles = get_pub_titles(pubs)
+    titles = get_pub_titles(pubs, full)
 
     for i in range(len(titles)):
         title = titles[i]
