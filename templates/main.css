@@ -15,6 +15,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     max-width: 800px;
+    min-width: 325px;
     width: 90%;
 }
 
@@ -126,16 +127,22 @@ a {
 
 .paper-conference, .news-left {
     float: left;
-    width: 12%;
+    width: 10%;
     text-decoration: none;
+    min-width: min-content;
+    padding-right: 2%;
 }
 
 .paper-conference {
     align-items: center;
 }
 
-.news-right, .paper-details {
+.paper-details {
     width: calc(100% - (12% + 25px * 4));
+}
+
+.news-right {
+    width: calc(100% - 12%);
 }
 
 .paper-icons {
