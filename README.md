@@ -1,8 +1,8 @@
 # Federico's Academic Website
 
-Feel free to do whatever you want with this website generator. No need to ask for permission or to credit me on your site. If you do use it, I'd love to hear how it went :)
+Feel free to use this website generator. No need to ask for permission or to credit me on your site. If you do use it, I'd love to hear how it went :)
 
-I promise no support or backward compatibility.
+**NOTE**: while I do not ask that you credit me on your site, please respect the software license in LICENSE.md.
 
 ## Creating Your Website
 1. Fill in the ```.json``` files in the ```data``` folder.
