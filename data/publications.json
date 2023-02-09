@@ -1,6 +1,6 @@
 [    {
         "title": "Towards more efficient methods for solving regular-expression heavy string constraints",
-        "year": "2022",
+        "year": "2023",
         "venue": {
             "name": "Theoretical Computer Science",
             "short": "TCS"
@@ -44,7 +44,7 @@
         "link": "https://www.sciencedirect.com/science/article/pii/S030439752200723X",
         "extra": "",
         "slides": "",
-        "bibtex": "",
+        "bibtex": "https://dblp.org/rec/journals/tcs/BerzishDGKMMN23.html?view=bibtex",
         "section": "Refereed Journal Publications",
         "selected": false
     },
