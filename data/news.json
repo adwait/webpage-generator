@@ -1,5 +1,9 @@
 [
     {
+        "date": "05/2023",
+        "text": "I won an <a href=\"https://www2.eecs.berkeley.edu/Students/Awards/13/\">Outstanding TA Award</a>!"
+    },
+    {
         "date": "02/2023",
         "text": "I passed my PhD qualifying exam!"
     },
@@ -10,6 +14,10 @@
     {
         "date": "06/2022",
         "text": "I contributed <a href=\"https://people.eecs.berkeley.edu/~sseshia/ssft2022/ssft22_bootcamp_uclid5.pdf\"> a verification excercise</a> to the Eleventh Summer School on Formal Techniques bootcamp"
+    },
+    {
+        "date": "05/2022",
+        "text": "I won an <a href=\"https://gsi.berkeley.edu/programs-services/award-programs/ogsi/\">Outstanding GSI Award</a>!"
     },
     {
         "date": "03/2022",
