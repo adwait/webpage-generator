@@ -1,4 +1,40 @@
 [    {
+        "title": "Genetic Algorithms for Searching a Matrix of Metagrammars for Synthesis",
+        "year": "2023",
+        "venue": {
+            "name": "12th Workshop on Synthesis",
+            "short": "SYNT"
+        },
+        "authors": [
+            {
+                "first": "Yixuan",
+                "middle": "",
+                "last": "Li"
+            },
+            {
+                "first": "Federico",
+                "middle": "",
+                "last": "Mora"
+            },
+            {
+                "first": "Elizabeth",
+                "middle": "",
+                "last": "Polgreen"
+            },
+            {
+                "first": "Sanjit",
+                "middle": "A.",
+                "last": "Seshia"
+            }
+        ],
+        "link": "https://arxiv.org/ftp/arxiv/papers/2306/2306.00521.pdf",
+        "extra": "",
+        "slides": "",
+        "bibtex": "",
+        "section": "Refereed Workshop Papers or Presentations",
+        "selected": false
+    },
+    {
         "title": "Towards more efficient methods for solving regular-expression heavy string constraints",
         "year": "2023",
         "venue": {
@@ -106,7 +142,7 @@
         "extra": "https://github.com/uclid-org/uclid",
         "slides": "https://easychair.org/smart-slide/slide/SJtw",
         "bibtex": "https://dblp.org/rec/conf/cav/PolgreenCGGLLMM22.html?view=bibtex",
-        "section": "Refereed Workshop, Short & Tool Papers",
+        "section": "Refereed Short or Tool Papers",
         "selected": true
     },
     {
@@ -188,7 +224,7 @@
         "extra": "",
         "slides": "https://www.youtube.com/watch?v=TS0E534MntA",
         "bibtex": "https://dblp.org/rec/conf/fm/ScottSRMG21.html?view=bibtex",
-        "section": "Refereed Workshop, Short & Tool Papers",
+        "section": "Refereed Short or Tool Papers",
         "selected": false
     },
     {
@@ -470,8 +506,8 @@
         "extra": "https://github.com/uclid-org/uclid",
         "slides": "https://people.eecs.berkeley.edu/~fmora/synt20_presentation.pdf",
         "bibtex": "https://dblp.org/rec/journals/corr/abs-2007-06760.html?view=bibtex",
-        "section": "Refereed Workshop, Short & Tool Papers",
-        "selected": true
+        "section": "Refereed Workshop Papers or Presentations",
+        "selected": false
     },
     {
         "title": "Client-Specific Equivalence Checking",
@@ -489,7 +525,8 @@
             {
                 "first": "Yi",
                 "middle": "",
-                "last": "Li"
+                "last": "Li",
+                "link": "https://personal.ntu.edu.sg/yi_li/"
             },
             {
                 "first": "Julia",
@@ -552,7 +589,7 @@
         "extra": "https://github.com/dblotsky/stringfuzz",
         "slides": "https://easychair.org/smart-slide/slide/pN13#",
         "bibtex": "https://dblp.org/rec/conf/cav/BlotskyMBZKG18.html?view=bibtex",
-        "section": "Refereed Workshop, Short & Tool Papers",
+        "section": "Refereed Short or Tool Papers",
         "selected": true
     }
 ]

@@ -270,15 +270,17 @@ def some_not_selected(pubs: List[Dict[str, str]]):
 def build_authors(authors):
     item = ""
 
-    authors_split = [
-        "%s%s%s"
-        % (
+    authors_split = []
+    for a in authors:
+        entry = "%s%s%s" % (
             a["first"][0] + ". ",
             a["middle"][0] + ". " if "middle" in a and a["middle"] else "",
             a["last"],
         )
-        for a in authors
-    ]
+        if "link" in a:
+            entry = '<a href="%s">%s</a>' % (a["link"], entry)
+        authors_split.append(entry)
+
     for i in range(len(authors_split)):
         entry = authors_split[i]
         if i < len(authors_split) - 2:
@@ -287,7 +289,8 @@ def build_authors(authors):
             entry += " and\n"
         authors_split[i] = entry
 
-    if len("".join(authors_split)) > 75:
+    authors_text = "".join(authors_split).replace('<a href="', "").replace('">', "").replace("</a>", "")
+    if len(authors_text) > 75:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
     return item
