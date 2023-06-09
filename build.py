@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 import os
-import re
-import sys
 import json
 import inspect
+import argparse
 import subprocess
 import collections
 
@@ -562,11 +561,23 @@ def build_pubs_page(
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+                prog="./build.py",
+                description="Federico's Academic Website Generator: Builds a website from json files.",
+                epilog="For more information, see README.md.")
+
+    parser.add_argument('-v', '--verbosity', type=int, default=0, help=f"set the output verbosity (default: 0)")
+    parser.add_argument('-o', '--output', type=str, default="docs", help=f"set the output directory (default: \"docs\")")
+    parser.add_argument('-t', '--templates', type=str, default="templates", help=f"set the templates directory (default: \"templates\")")
+    parser.add_argument('-c', "--curriculum-vitae", action="store_true", help="generate a curriculum vitae in LaTeX too")
+    
+    args = parser.parse_args()
+
     config = Config(
-        verbosity=int(sys.argv[1]) if len(sys.argv) > 1 else 0,
+        verbosity=args.verbosity,
         prefix=os.path.dirname(__file__),
-        target="docs",
-        templates="templates",
+        target=args.output,
+        templates=args.templates,
     )
 
     cleanup()
@@ -750,6 +761,14 @@ if __name__ == "__main__":
     write_file(f"{config.target}/dark.css", dark_css)
 
     # Got to here means everything went well
-    msg = f"Open {config.target}/index.html in your browser to see your website!"
-    success(msg)
+    success(f"Open {config.target}/index.html in your browser to see your website!")
+
+    if not args.curriculum_vitae:
+        exit(0)
+    
+    status("Generating Curriculum Vitae Latex:")
+    fail_if_not(False, "CV support not implemented yet!")
+
+    # Got to here means everything went well
+    success(f"Navigate to {config.target}/cv and do `make view` to see your curriculum vitae!")
     exit(0)
