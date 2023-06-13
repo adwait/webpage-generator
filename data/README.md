@@ -26,3 +26,13 @@ Please replace all my data with your data.
 - ```extra-img```: icon for link to paper supplementary material, usually saved in ```docs/images/```.
 - ```slides-img```: icon for link to paper presentation, usually saved in ```docs/images/```.
 - **NOTE**: fields with the ```-dark``` suffix are optional but recommended.
+
+**publications.bib**
+- ```build_short```: short name of venue (appears on website).
+- ```build_keywords```: section heading for website and CV.
+- ```build_selected```: select to appear on front page of website.
+- ```build_link```: link to PDF.
+- ```build_extra```: link to supplementary material.
+- ```build_slides```: link to slides or video of presentation.
+- ```build_bibtex```: link to bibtex entry.
+- All other fields are normal bibtex.

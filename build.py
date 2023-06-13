@@ -9,6 +9,7 @@ import collections
 
 from typing import Dict, List
 from datetime import datetime
+from pybtex.database import parse_file, Person
 
 Config = collections.namedtuple(
     "Config", ["verbosity", "prefix", "target", "templates"]
@@ -249,18 +250,18 @@ def build_news(news: List[Dict[str, str]], count: int, standalone: bool):
 
 
 # Helper function to decide what publication sections to include
-def get_pub_titles(pubs: List[Dict[str, str]], full: bool):
+def get_pub_titles(pubs, full: bool):
     titles = set()
-    for p in pubs:
-        if p["selected"] or full:
-            titles.add(p["section"])
+    for p in pubs.entries.values():
+        if p.fields["build_selected"] == "true" or full:
+            titles.add(p.fields["build_keywords"])
 
     return sorted(list(titles))
 
 
-def some_not_selected(pubs: List[Dict[str, str]]):
-    for p in pubs:
-        if not p["selected"]:
+def some_not_selected(pubs):
+    for p in pubs.entries.values():
+        if not p.fields["build_selected"] == "true":
             return True
 
     return False
@@ -272,12 +273,10 @@ def build_authors(authors):
     authors_split = []
     for a in authors:
         entry = "%s%s%s" % (
-            a["first"][0] + ". ",
-            a["middle"][0] + ". " if "middle" in a and a["middle"] else "",
-            a["last"],
+            " ".join(a.first_names)[0] + ". ",
+            " ".join(a.middle_names)[0] + ". " if len(a.middle_names) > 0 else "",
+            " ".join(a.last_names),
         )
-        if "link" in a:
-            entry = '<a href="%s">%s</a>' % (a["link"], entry)
         authors_split.append(entry)
 
     for i in range(len(authors_split)):
@@ -288,7 +287,7 @@ def build_authors(authors):
             entry += " and\n"
         authors_split[i] = entry
 
-    authors_text = "".join(authors_split).replace('<a href="', "").replace('">', "").replace("</a>", "")
+    authors_text = "".join(authors_split)
     if len(authors_text) > 75:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
@@ -299,61 +298,61 @@ def build_icons(p):
     item = ""
     item += (
         '<a href="'
-        + p["link"]
+        + p.fields["build_link"]
         + '" alt="[PDF] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
         % (style_json["paper-img"], style_json["paper-img-dark"])
-        if p["link"]
+        if p.fields["build_link"]
         else ""
     )
     item += (
         '<a href="'
-        + p["extra"]
+        + p.fields["build_extra"]
         + '" alt="[Extra] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
         % (style_json["extra-img"], style_json["extra-img-dark"])
-        if p["extra"]
+        if p.fields["build_extra"]
         else ""
     )
     item += (
         '<a href="'
-        + p["slides"]
+        + p.fields["build_slides"]
         + '" alt="[Slides] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
         % (style_json["slides-img"], style_json["slides-img-dark"])
-        if p["slides"]
+        if p.fields["build_slides"]
         else ""
     )
     item += (
         '<a href="'
-        + p["bibtex"]
+        + p.fields["build_bibtex"]
         + '" alt="[Bibtex] "><img class="paper-icon" src="%s"/><img class="paper-icon-dark" src="%s"/></a>'
         % (style_json["bibtex-img"], style_json["bibtex-img-dark"])
-        if p["bibtex"]
+        if p.fields["build_bibtex"]
         else ""
     )
     return item
 
 
-def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
+def build_pubs_inner(pubs, title: str, full: bool):
     if title == "":
         return ""
 
     pubs_list = ""
 
-    for p in pubs:
-        if title == p["section"] and (p["selected"] or full):
-            status("- " + p["title"])
+    for p in pubs.entries.values():
+        if title == p.fields["build_keywords"] and (p.fields["build_selected"] == "true" or full):
+            status("- " + p.fields["title"])
 
-            paper_conference = p["venue"]["short"] + " '" + p["year"][-2:]
+            paper_conference = p.fields["build_short"] + " '" + p.fields["year"][-2:]
             if len(paper_conference) > 8:
                 paper_conference = f'<div class="bigscreen"><small>{paper_conference}</small></div><div class="smallscreen">{paper_conference}</div>'
 
-            title_split = p["title"].split()
-            if len(p["title"]) > 75:
+            title_split = p.fields["title"].split()
+            if len(p.fields["title"]) > 75:
                 title_split.insert(len(title_split) // 2, '<br class="bigscreen">')
             paper_title = " ".join(title_split)
 
             paper_map = {
                 "paper-title": paper_title,
-                "paper-authors": build_authors(p["authors"]),
+                "paper-authors": build_authors(p.persons['author']),
                 "paper-conference": paper_conference,
                 "paper-icons": build_icons(p),
             }
@@ -365,8 +364,8 @@ def build_pubs_inner(pubs: List[Dict[str, str]], title: str, full: bool):
     return pubs_html
 
 
-def build_pubs(pubs: List[Dict[str, str]], full: bool):
-    if len(pubs) == 0:
+def build_pubs(pubs, full: bool):
+    if len(pubs.entries) == 0:
         return ""
 
     status("\nAdding publications:")
@@ -480,7 +479,7 @@ def add_links(html: str, links: Dict[str, str]):
 def build_index(
     profile_json: Dict[str, str],
     news_json: List[Dict[str, str]],
-    pubs_json: List[Dict[str, str]],
+    pubs_bibtex,
     links: Dict[str, str],
     notes: Dict[str, str],
     has_dark: bool,
@@ -490,7 +489,7 @@ def build_index(
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
     body_html += build_news(news_json, 5, False)
-    body_html += build_pubs(pubs_json, False)
+    body_html += build_pubs(pubs_bibtex, False)
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -533,12 +532,12 @@ def build_news_page(
 
 
 def build_pubs_page(
-    pubs_json: List[Dict[str, str]],
+    pubs_bibtex,
     links: Dict[str, str],
     notes: Dict[str, str],
     has_dark: bool,
 ):
-    content = build_pubs(pubs_json, True)
+    content = build_pubs(pubs_bibtex, True)
 
     if content == "":
         return ""
@@ -559,6 +558,46 @@ def build_pubs_page(
 
     return inspect.cleandoc(pubs_html)
 
+
+def build_cv(
+    meta_json: Dict[str, str],
+    profile_json: Dict[str, str],
+    education_json: Dict[str, str],
+    pubs_bibtex,
+):
+    cv_tex = r"\documentclass{federico_cv}" + "\n"
+    cv_tex += r"\frenchspacing" + "\n"
+    cv_tex += r"\usepackage[backend=biber,style=numeric,refsection=section,maxbibnames=99,sorting=none,defernumbers=true]{biblatex}" + "\n"
+    cv_tex += r"\bibliography{cv}" + "\n"
+    cv_tex += r"\begin{document}" + "\n\n\n"
+
+    cv_tex += f"\contact{{{meta_json['name']}}}\n"
+    cv_tex += f"{{\MYhref{{{profile_json['website']}}}{{{profile_json['website']}}}}}\n"
+    cv_tex += f"{{\MYhref{{mailto:{profile_json['email']}}}{{{profile_json['email']}}}}}\n\n\n"
+
+    cv_tex += "\section{Research Interests}\n"
+    cv_tex += f"{profile_json['research']}\n\n\n"
+
+    cv_tex += r"\begin{tblSection}{Education}{0.1}{0.85}" + "\n"
+    for edu in education_json:
+        cv_tex += "\degree\n"
+        cv_tex += f"{{{edu['year']}}}\n"
+        cv_tex += f"{{{edu['degree']}}}\n"
+        cv_tex += f"{{{edu['note']}}}\n"
+        cv_tex += f"{{{edu['institution']}}}\n\n"
+    cv_tex += r"\end{tblSection}" + "\n\n\n"
+
+    cv_tex += r"\nocite{*}" + "\n"
+    sections = []
+    for pub in pubs_bibtex.entries.values():
+        sections.append(pub.fields["build_keywords"])
+    sections = sorted(list(set(sections)))
+    for section in sections:
+        cv_tex += f"\printbibliography[keyword={{{section}}},title={{{section}}},resetnumbers=true]\n"
+    cv_tex += "\n\n\n"
+
+    cv_tex += r"\end{document}"
+    return cv_tex
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -677,40 +716,53 @@ if __name__ == "__main__":
         "The dates in data/news.json are not in order.",
     )
 
-    pubs_json = read_data("data/publications.json", optional=True)
-    for pub in pubs_json:
+    pubs_bibtex = parse_file("data/publications.bib") if os.path.exists("data/publications.bib") else []
+    for pub in pubs_bibtex.entries.values():
         fail_if_not(
-            "title" in pub,
+            "title" in pub.fields,
             'Must include a "title" field for each pub in data/publications.json!',
         )
         fail_if_not(
-            "venue" in pub,
-            'Must include a "venue" field for each pub in data/publications.json!',
+            "journal" in pub.fields or "booktitle" in pub.fields,
+            'Must include a "journal" or "booktitle" field for each pub in data/publications.json!',
         )
         fail_if_not(
-            "short" in pub["venue"],
-            'Must include a "short" subfield for each pub venue in data/publications.json!',
+            len(pub.persons['author']) > 0,
+            'Must include an "author" field for each pub in data/publications.json!',
         )
         fail_if_not(
-            "name" in pub["venue"],
-            'Must include a "name" subfield for each pub venue in data/publications.json!',
-        )
-        fail_if_not(
-            "authors" in pub,
-            'Must include a "authors" field for each pub in data/publications.json!',
+            "build_short" in pub.fields,
+            'Must include a "build_short" subfield for each pub venue in data/publications.json!',
         )
 
-        fill_if_missing(pub, "link")
-        fill_if_missing(pub, "extra")
-        fill_if_missing(pub, "slides")
+        pub.fields["build_link"] = "" if "build_link" not in pub.fields else pub.fields["build_link"]
+        pub.fields["build_extra"] = "" if "build_extra" not in pub.fields else pub.fields["build_extra"]
+        pub.fields["build_slides"] = "" if "build_slides" not in pub.fields else pub.fields["build_slides"]
+        pub.fields["build_bibtex"] = "" if "build_bibtex" not in pub.fields else pub.fields["build_bibtex"]
 
         fail_if_not(
-            "section" in pub,
-            'Must include a "section" field for each pub in data/publications.json!',
+            "build_keywords" in pub.fields,
+            'Must include a "build_keywords" field for each pub in data/publications.json!',
         )
         fail_if_not(
-            "selected" in pub,
-            'Must include a "selected" field for each pub in data/publications.json!',
+            "build_selected" in pub.fields,
+            'Must include a "build_selected" field for each pub in data/publications.json!',
+        )
+
+    education_json = read_data("data/education.json", optional=True)
+    for education in education_json:
+        fail_if_not(
+            "year" in education,
+            'Must include a "year" field for each education in data/education.json!',
+        )
+        fail_if_not(
+            "degree" in education,
+            'Must include a "degree" field for each education in data/education.json!',
+        )
+        fill_if_missing(education, "note")
+        fail_if_not(
+            "institution" in education,
+            'Must include a "institution" field for each education in data/education.json!',
         )
 
     auto_links_json = read_data("data/auto_links.json", optional=True)
@@ -746,9 +798,9 @@ if __name__ == "__main__":
     light_css = replace_placeholders(light_css, style_json)
     dark_css = replace_placeholders(dark_css, style_json)
     news_page = build_news_page(news_json, auto_links_json, auto_notes_json, has_dark)
-    pubs_page = build_pubs_page(pubs_json, auto_links_json, auto_notes_json, has_dark)
+    pubs_page = build_pubs_page(pubs_bibtex, auto_links_json, auto_notes_json, has_dark)
     index_page = build_index(
-        profile_json, news_json, pubs_json, auto_links_json, auto_notes_json, has_dark
+        profile_json, news_json, pubs_bibtex, auto_links_json, auto_notes_json, has_dark
     )
 
     # Write to files
@@ -767,7 +819,26 @@ if __name__ == "__main__":
         exit(0)
     
     status("Generating Curriculum Vitae Latex:")
-    fail_if_not(False, "CV support not implemented yet!")
+    write_file(f"{config.target}/cv/cv.tex", build_cv(meta_json, profile_json, education_json, pubs_bibtex))
+    
+    # remove all the entries in pubs_bibtex that start with build_
+    for key in list(pubs_bibtex.entries.keys()):
+        for field in list(pubs_bibtex.entries[key].fields.keys()):
+            if field == "build_keywords":
+                pubs_bibtex.entries[key].fields["keywords"] = pubs_bibtex.entries[key].fields["build_keywords"]
+                pubs_bibtex.entries[key].fields.pop(field)
+            elif field.startswith("build_"):
+                pubs_bibtex.entries[key].fields.pop(field)
+
+    # make the your name bold in cv
+    for key in list(pubs_bibtex.entries.keys()):
+        authors = pubs_bibtex.entries[key].persons["author"]
+        for name in meta_json["name"].split():
+            authors = [Person(str(author).replace(name, r"\textbf{" + name + "}")) for author in authors]
+        pubs_bibtex.entries[key].persons["author"] = authors
+
+    pubs_bibtex.to_file(f"{config.target}/cv/cv.bib")
+
 
     # Got to here means everything went well
     success(f"Navigate to {config.target}/cv and do `make view` to see your curriculum vitae!")
