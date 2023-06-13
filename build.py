@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import json
 import inspect
 import argparse
@@ -277,6 +278,13 @@ def build_authors(authors):
             " ".join(a.middle_names)[0] + ". " if len(a.middle_names) > 0 else "",
             " ".join(a.last_names),
         )
+
+        name = " ".join(a.first_names)
+        name += "" if len(a.middle_names) == 0 else " " + " ".join(a.middle_names)
+        name += " " + " ".join(a.last_names)
+        if name in auto_links_json:
+            entry = '<a href="%s">%s</a>' % (auto_links_json[name], entry)
+
         authors_split.append(entry)
 
     for i in range(len(authors_split)):
@@ -287,7 +295,8 @@ def build_authors(authors):
             entry += " and\n"
         authors_split[i] = entry
 
-    authors_text = "".join(authors_split)
+    authors_text = "".join(authors_split).replace('<a href="', "").replace('">', "").replace('</a>', '')
+    authors_text = re.sub(r'http\S+', '', authors_text)
     if len(authors_text) > 75:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
     item += "".join(authors_split)
