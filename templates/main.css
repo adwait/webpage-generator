@@ -234,6 +234,12 @@ a {
         width: 0;
         height: 0;
     }
+
+    .headshot {
+        padding-bottom: 1.25em;
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 /* Mode switch */
