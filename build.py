@@ -285,7 +285,7 @@ def build_authors(authors, mentoring_json: List[Dict[str, str]]):
         if name in auto_links_json:
             entry = '<a href="%s">%s</a>' % (auto_links_json[name], entry)
         if name in [e["name"] for e in mentoring_json]:
-            entry = f"{entry}*"
+            entry = f"{entry}<sup class=\"bigscreen\">*</sup>"
 
         authors_split.append(entry)
 
@@ -297,7 +297,7 @@ def build_authors(authors, mentoring_json: List[Dict[str, str]]):
             entry += " and\n"
         authors_split[i] = entry
 
-    authors_text = "".join(authors_split).replace('<a href="', "").replace('">', "").replace('</a>', '')
+    authors_text = "".join(authors_split).replace('<a href="', "").replace('">', "").replace('</a>', '').replace('<sup class="bigscreen">*</sup>', '')
     authors_text = re.sub(r'http\S+', '', authors_text)
     if len(authors_text) > 75:
         authors_split.insert(len(authors_split) // 2, '<br class="bigscreen">')
