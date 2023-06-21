@@ -1,0 +1,14 @@
+[
+    {
+        "year"    : "2020",
+        "name"    : "Nikhil Pimpalkhare",
+        "notes"   : ["Next: Graduate Student at Princeton University"],
+        "category": "UC Berkeley Undergraduate Students"
+    },
+    {
+        "year"    : "2019",
+        "name"    : "Murad Akhundov",
+        "notes"   : ["POPL '20 USRC Winner", "Next: Software Engineer at Okta"],
+        "category": "University of Toronto Undergraduate Students"
+    }
+]

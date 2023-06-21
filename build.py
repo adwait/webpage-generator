@@ -268,7 +268,7 @@ def some_not_selected(pubs):
     return False
 
 
-def build_authors(authors):
+def build_authors(authors, mentoring_json: List[Dict[str, str]]):
     item = ""
 
     authors_split = []
@@ -284,6 +284,8 @@ def build_authors(authors):
         name += " " + " ".join(a.last_names)
         if name in auto_links_json:
             entry = '<a href="%s">%s</a>' % (auto_links_json[name], entry)
+        if name in [e["name"] for e in mentoring_json]:
+            entry = f"{entry}*"
 
         authors_split.append(entry)
 
@@ -340,7 +342,7 @@ def build_icons(p):
     return item
 
 
-def build_pubs_inner(pubs, title: str, full: bool):
+def build_pubs_inner(pubs, mentoring_json: List[Dict[str, str]], title: str, full: bool):
     if title == "":
         return ""
 
@@ -361,7 +363,7 @@ def build_pubs_inner(pubs, title: str, full: bool):
 
             paper_map = {
                 "paper-title": paper_title,
-                "paper-authors": build_authors(p.persons['author']),
+                "paper-authors": build_authors(p.persons['author'], mentoring_json),
                 "paper-conference": paper_conference,
                 "paper-icons": build_icons(p),
             }
@@ -373,7 +375,7 @@ def build_pubs_inner(pubs, title: str, full: bool):
     return pubs_html
 
 
-def build_pubs(pubs, full: bool):
+def build_pubs(pubs, mentoring_json: List[Dict[str, str]], full: bool):
     if len(pubs.entries) == 0:
         return ""
 
@@ -390,16 +392,18 @@ def build_pubs(pubs, full: bool):
             % link
         )
     else:
-        pubs_html += "<h1>Publications</h1>"
+        pubs_html += '<h1>Publications</h1>'
+    
 
     pubs_html += '<div class="hbar"></div>\n'
+    pubs_html += '<small class="bigscreen" style="font-weight: 300; float: right; padding-top: 0.5em">* denotes undergraduate research mentee</small>\n'
     pubs_html += '<div id="publications">\n'
 
     titles = get_pub_titles(pubs, full)
 
     for i in range(len(titles)):
         title = titles[i]
-        pubs_html += build_pubs_inner(pubs, title, full)
+        pubs_html += build_pubs_inner(pubs, mentoring_json, title, full)
 
     pubs_html += "</div>\n"  # close pubs
     pubs_html += "</div>\n"  # close section
@@ -489,6 +493,7 @@ def build_index(
     profile_json: Dict[str, str],
     news_json: List[Dict[str, str]],
     pubs_bibtex,
+    mentoring_json: List[Dict[str, str]],
     links: Dict[str, str],
     notes: Dict[str, str],
     has_dark: bool,
@@ -498,7 +503,7 @@ def build_index(
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
     body_html += build_news(news_json, 5, False)
-    body_html += build_pubs(pubs_bibtex, False)
+    body_html += build_pubs(pubs_bibtex, mentoring_json, False)
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -542,11 +547,12 @@ def build_news_page(
 
 def build_pubs_page(
     pubs_bibtex,
+    mentoring_json: List[Dict[str, str]],
     links: Dict[str, str],
     notes: Dict[str, str],
     has_dark: bool,
 ):
-    content = build_pubs(pubs_bibtex, True)
+    content = build_pubs(pubs_bibtex, mentoring_json, True)
 
     if content == "":
         return ""
@@ -725,6 +731,13 @@ if __name__ == "__main__":
         "The dates in data/news.json are not in order.",
     )
 
+    mentoring_json = read_data("data/mentoring.json", optional=True)
+    for mentoring in mentoring_json:
+        fail_if_not(
+            "name" in mentoring,
+            'Must include a "name" field for each mentoring in data/mentoring.json!',
+        )
+
     pubs_bibtex = parse_file("data/publications.bib") if os.path.exists("data/publications.bib") else []
     for pub in pubs_bibtex.entries.values():
         fail_if_not(
@@ -807,10 +820,8 @@ if __name__ == "__main__":
     light_css = replace_placeholders(light_css, style_json)
     dark_css = replace_placeholders(dark_css, style_json)
     news_page = build_news_page(news_json, auto_links_json, auto_notes_json, has_dark)
-    pubs_page = build_pubs_page(pubs_bibtex, auto_links_json, auto_notes_json, has_dark)
-    index_page = build_index(
-        profile_json, news_json, pubs_bibtex, auto_links_json, auto_notes_json, has_dark
-    )
+    pubs_page = build_pubs_page(pubs_bibtex, mentoring_json, auto_links_json, auto_notes_json, has_dark)
+    index_page = build_index(profile_json, news_json, pubs_bibtex, mentoring_json, auto_links_json, auto_notes_json, has_dark)
 
     # Write to files
     status("\nWriting website:")
