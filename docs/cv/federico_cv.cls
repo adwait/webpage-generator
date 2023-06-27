@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{federico_cv}[6/6/2022 custom CV class]
+\ProvidesClass{federico_cv}[custom CV class]
 \LoadClass{article}
 \RequirePackage{titlesec}
 \usepackage[letterpaper,
@@ -19,13 +19,15 @@
             citecolor = dark,
             anchorcolor = dark]{hyperref}
 
-\newcommand{\MYhref}[3][dark]{\href{#2}{\color{#1}{#3}}}%
+\usepackage[normalem]{ulem}
+\setlength{\ULdepth}{2pt}
+
+\newcommand{\link}[2]{\href{#1}{\dashuline{\smash{#2}}}}
 
 \usepackage{fancyhdr}
  
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{Federico Mora}
 \usepackage{lastpage}
 \rhead{\thepage/\pageref{LastPage}}
 \renewcommand{\headrulewidth}{0pt}
@@ -91,7 +93,7 @@
 
 \newcommand{\degree}{\leftbfrightsingle}
 \newcommand{\job}{\leftbfrightsingle}
-\newcommand{\student}{\leftrightsingletight}
+\newcommand{\students}{\leftbfrightsingletight}
 \newcommand{\service}{\bfsingledash}
 \newcommand{\award}{\leftrightsingletight}
 \newcommand{\grant}{\leftbfrightsingle}
