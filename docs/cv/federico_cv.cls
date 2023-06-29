@@ -38,7 +38,7 @@
 \usepackage{tabularx}
 \newcommand{\contact}[3]{
 \vfill\noindent
-\begin{tabularx}{\textwidth}{Xr}
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
   \multirow{2}{*}{\textbf{\huge{#1}}} & #2\\
                                       & #3\\
 \end{tabularx}
@@ -91,9 +91,13 @@
 \newcommand{\leftbfrightsingletightCheckNextArg}{\@ifnextchar\bgroup{\leftbfrightsingletightGobbleNextArg}{\\[-1em]}}
 \newcommand{\leftbfrightsingletightGobbleNextArg}[1]{& #1 \\\@ifnextchar\bgroup{\leftbfrightsingletightGobbleNextArg}{\\[-1em]}}
 
+\newcommand{\students}[2]{%
+    #1 & \textbf{#2} \\\studentsCheckNextArg}
+\newcommand{\studentsCheckNextArg}{\@ifnextchar\bgroup{\studentsGobbleNextArg}{\\[-1em]}}
+\newcommand{\studentsGobbleNextArg}[1]{& #1 \\\@ifnextchar\bgroup{\studentsGobbleNextArg}{\\[-0.65em]}}
+
 \newcommand{\degree}{\leftbfrightsingle}
 \newcommand{\job}{\leftbfrightsingle}
-\newcommand{\students}{\leftbfrightsingletight}
 \newcommand{\service}{\bfsingledash}
 \newcommand{\award}{\leftrightsingletight}
 \newcommand{\grant}{\leftbfrightsingle}
