@@ -284,6 +284,8 @@ def build_authors(authors, mentoring_json: List[Dict[str, str]]):
         name += " " + " ".join(a.last_names)
         if name in auto_links_json:
             entry = '<a href="%s">%s</a>' % (auto_links_json[name], entry)
+        else:
+            status(f"-- {name} is not in auto_links.json", 3)
         if name in [e["name"] for e in mentoring_json]:
             entry = f"{entry}<sup class=\"bigscreen\">*</sup>"
 
