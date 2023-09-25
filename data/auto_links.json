@@ -1,7 +1,7 @@
 {
-    "Mount Allison University": "https://www.mta.ca/Prospective/Default.aspx",
-    "University of Toronto": "http://web.cs.toronto.edu/", 
-    "University of California, Berkeley": "https://eecs.berkeley.edu/",
+    "Mount Allison University": "https://en.wikipedia.org/wiki/Mount_Allison_University",
+    "University of Toronto": "https://en.wikipedia.org/wiki/University_of_Toronto", 
+    "University of California, Berkeley": "https://en.wikipedia.org/wiki/University_of_California,_Berkeley",
 
     "Marsha Chechik": "http://www.cs.toronto.edu/~chechik/",
     "Julia Rubin": "https://www.ece.ubc.ca/~mjulia/",
@@ -63,5 +63,9 @@
 
     "The African American Museum and Library at Oakland": "https://oaklandlibrary.org/content/newspapers-and-journalists/",
 
-    "Eleventh Summer School on Formal Techniques": "https://fm.csl.sri.com/SSFT22/"
+    "Eleventh Summer School on Formal Techniques": "https://fm.csl.sri.com/SSFT22/",
+
+    "automated reasoning": "https://en.wikipedia.org/wiki/Automated_reasoning",
+    "programming language theory": "https://en.wikipedia.org/wiki/Programming_language_theory",
+    "formal methods": "https://en.wikipedia.org/wiki/Formal_methods"
 }
