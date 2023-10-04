@@ -5,9 +5,9 @@
 \usepackage[letterpaper,
             left=1in,
             right=1in,
-            top=0.75in,
-            bottom=0.75in,
-            footskip=.25in]{geometry}
+            top=1in,
+            bottom=1in,
+            footskip=0in]{geometry}
 \usepackage{float}
 \usepackage[dvipsnames]{xcolor}
 
@@ -31,7 +31,7 @@
 \usepackage{lastpage}
 \rhead{\thepage/\pageref{LastPage}}
 \renewcommand{\headrulewidth}{0pt}
-\setlength{\headheight}{0.4in}
+\setlength{\headheight}{0in}
 
 \thispagestyle{empty}
 \usepackage{multirow}
@@ -42,7 +42,7 @@
   \multirow{2}{*}{\textbf{\huge{#1}}} & #2\\
                                       & #3\\
 \end{tabularx}
-\vspace{0.5em}
+\vspace{0em}
 }
 
 \usepackage{longtable}
