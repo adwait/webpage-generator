@@ -1,7 +1,15 @@
 [
     {
+        "date": "10/2023",
+        "text": "Haley Lepe, my mentee, won a National Diversity in STEM Conference Presentation Award!"
+    },
+    {
+        "date": "10/2023",
+        "text": "<a href=\"https://www.youtube.com/live/6D6n4e9wqus?feature=shared&t=28997\">I presented</a> our paper on message chains for distributed system verification at OOPSLA '23"
+    },
+    {
         "date": "06/2023",
-        "text": "Amar Shah won the PLDI undergraduate student research competition!"
+        "text": "Amar Shah, my mentee, won the PLDI undergraduate student research competition!"
     },
     {
         "date": "05/2023",
@@ -69,7 +77,7 @@
     },
     {
         "date": "01/2020",
-        "text": "Murad Akhundov won the POPL undergraduate student research competition!"
+        "text": "Murad Akhundov, my mentee, won the POPL undergraduate student research competition!"
     },
     {
         "date": "07/2019",
