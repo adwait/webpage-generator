@@ -1,5 +1,11 @@
 [
     {
+        "year"    : "2023",
+        "name"    : "Amar Shah",
+        "notes"   : [],
+        "category": "UC Berkeley Undergraduate Students"
+    },
+    {
         "year"    : "2020",
         "name"    : "Nikhil Pimpalkhare",
         "notes"   : ["Next: Graduate Student at Princeton University"],
