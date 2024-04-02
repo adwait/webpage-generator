@@ -1,5 +1,9 @@
 [
     {
+        "date": "04/2024",
+        "text": "I won UC Berkeley's <a href=\"https://ga.berkeley.edu/ga-news/ga-mentorship-awards/\">Outstanding Graduate Student Peer Mentor Award</a>!"
+    },
+    {
         "date": "02/2024",
         "text": "<a href=\"https://youtu.be/I1wHDsPZHbI\">I presented</a> our paper on an eager SMT solver for ADTs at AAAI '24"
     },
@@ -29,7 +33,7 @@
     },
     {
         "date": "06/2022",
-        "text": "I contributed <a href=\"https://people.eecs.berkeley.edu/~sseshia/ssft2022/ssft22_bootcamp_uclid5.pdf\"> a verification excercise</a> to the Eleventh Summer School on Formal Techniques bootcamp"
+        "text": "I contributed <a href=\"https://people.eecs.berkeley.edu/~sseshia/ssft2022/ssft22_bootcamp_uclid5.pdf\"> a verification exercise</a> to the Eleventh Summer School on Formal Techniques bootcamp"
     },
     {
         "date": "05/2022",
@@ -65,7 +69,7 @@
     },
     {
         "date": "07/2020",
-        "text": "<a href=\"https://www.youtube.com/watch?v=UK2Z8xnq8r8\">I presented</a> our workshop paper on synthesis in Uclid5 at SYNT '20"
+        "text": "<a href=\"https://www.youtube.com/watch?v=UK2Z8xnq8r8\">I presented</a> our workshop paper on synthesis in UCLID5 at SYNT '20"
     },
     {
         "date": "06/2020",
