@@ -4,6 +4,11 @@
         "text": "I won UC Berkeley's <a href=\"https://ga.berkeley.edu/ga-news/ga-mentorship-awards/\">Outstanding Graduate Student Peer Mentor Award</a>!"
     },
     {
+        "date": "04/2024",
+        "text": "I won the <a href=\"https://www2.eecs.berkeley.edu/Students/Awards/1/\">Demetri Angelakos Memorial Achievement Award</a>!"
+    },
+    
+    {
         "date": "02/2024",
         "text": "<a href=\"https://youtu.be/I1wHDsPZHbI\">I presented</a> our paper on an eager SMT solver for ADTs at AAAI '24"
     },
