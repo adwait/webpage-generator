@@ -5,15 +5,13 @@
 \usepackage[letterpaper,
             left=0.3in,
             right=2.2in,
+            top=1in,
             marginparwidth=1.9in]{geometry}
 \usepackage{float}
 \usepackage[dvipsnames]{xcolor}
 
 \usepackage{marginnote}
 \renewcommand*{\marginfont}{\footnotesize}
-
-\usepackage{stix}
-\newcommand*{\vrectangleB}{{\setlength{\fboxsep}{0pt}\fbox{\phantom{5}}}}
 
 \usepackage{fontspec}
 \setmainfont{HelveticaNeue}
