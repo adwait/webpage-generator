@@ -3,13 +3,20 @@
 \LoadClass{article}
 \RequirePackage{titlesec}
 \usepackage[letterpaper,
-            left=1in,
-            right=1in,
-            top=1in,
-            bottom=1in,
-            footskip=0in]{geometry}
+            left=0.3in,
+            right=2.2in,
+            marginparwidth=1.9in]{geometry}
 \usepackage{float}
 \usepackage[dvipsnames]{xcolor}
+
+\usepackage{marginnote}
+\renewcommand*{\marginfont}{\footnotesize}
+
+\usepackage{stix}
+\newcommand*{\vrectangleB}{{\setlength{\fboxsep}{0pt}\fbox{\phantom{5}}}}
+
+\usepackage{fontspec}
+\setmainfont{HelveticaNeue}
 
 \definecolor{dark}{RGB}{0, 0, 0}
 
@@ -25,7 +32,9 @@
 \newcommand{\link}[2]{\href{#1}{\dashuline{\smash{#2}}}}
 
 \usepackage{fancyhdr}
- 
+
+% \usepackage{showframe} % good for debugging
+
 \pagestyle{fancy}
 \fancyhf{}
 \usepackage{lastpage}
@@ -38,9 +47,9 @@
 \usepackage{tabularx}
 \newcommand{\contact}[3]{
 \vfill\noindent
-\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
   \multirow{2}{*}{\textbf{\huge{#1}}} & #2\\
-                                      & #3\\
+                                      & #3
 \end{tabularx}
 \vspace{0em}
 }
@@ -48,19 +57,47 @@
 \usepackage{longtable}
 
 \titleformat{\section}
-  {\large\scshape\raggedright}
+  {\large}
   {}{0em}
   {}
   [\titlerule]
 
-\newenvironment{tblSection}[3]
-    {\section{#1}
-    \vspace{-1.25em}
-    \begin{longtable}{@{}p{#2\textwidth} p{#3\textwidth} }
+\titleformat{\subsection}
+  {\normalsize}
+  {}{0em}
+  {}
+  [\titlerule]
+
+\newenvironment{halfTblSubSection}[3]
+    {
+    \begin{minipage}[t]{0.45\linewidth}
+    \begin{longtable}{@{}p{#2\linewidth} p{#3\linewidth}}
+        \multicolumn{2}{@{}p{\linewidth}}{#1} \\
+        \cline{1-2} \\
     }
     {
     \end{longtable}
-    \vspace{-0.4em}
+    \end{minipage}
+    }
+
+\newenvironment{tblSection}[3]
+    {
+    \section{#1}
+    \vspace{-1em}
+    \begin{longtable}{@{}p{#2\linewidth} p{#3\linewidth} }
+    }
+    {
+    \end{longtable}
+    }
+
+\newenvironment{tblSubSection}[3]
+    {
+    \subsection{#1}
+    \vspace{-1em}
+    \begin{longtable}{@{}p{#2\linewidth} p{#3\linewidth} }
+    }
+    {
+    \end{longtable}
     }
 
 \newcommand{\leftbfrightsmallleftright}[2]{#1 & \textbf{#2}\\\leftbfrightsmallleftrightCheckNextArg}
