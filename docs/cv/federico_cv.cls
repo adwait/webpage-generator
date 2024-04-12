@@ -2,16 +2,11 @@
 \ProvidesClass{federico_cv}[custom CV class]
 \LoadClass{article}
 \RequirePackage{titlesec}
-\usepackage[letterpaper,
-            left=0.3in,
-            right=2.2in,
-            top=1in,
-            marginparwidth=1.9in]{geometry}
+\usepackage[letterpaper, bottom=0.75in, top=1in, footnotesep=2em]{geometry}
 \usepackage{float}
 \usepackage[dvipsnames]{xcolor}
 
-\usepackage{marginnote}
-\renewcommand*{\marginfont}{\footnotesize}
+\usepackage[multiple,symbol]{footmisc}
 
 \usepackage{fontspec}
 \setmainfont{HelveticaNeue}
