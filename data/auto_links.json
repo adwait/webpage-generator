@@ -1,5 +1,6 @@
 {
     "Mount Allison University": "https://en.wikipedia.org/wiki/Mount_Allison_University",
+    "Indian Institute of Technology, Bombay": "https://www.iitb.ac.in/",
     "University of Toronto": "https://en.wikipedia.org/wiki/University_of_Toronto", 
     "University of California, Berkeley": "https://en.wikipedia.org/wiki/University_of_California,_Berkeley",
 
@@ -27,10 +28,21 @@
     "Nicolas Chan" : "https://www.nicolaschan.com/",
     "Kevin Laeufer" : "https://kevinlaeufer.com/",
     "Shaokai Lin" : "https://shaokai.io/",
+    "Yatin A. Manerkar": "https://web.eecs.umich.edu/~manerkar/",
     "Yatin Manerkar": "https://web.eecs.umich.edu/~manerkar/",
-    "Adwait Godbole": "https://github.com/adwait",
+    "Adwait Godbole": "https://adwait.github.io",
     "Pranav Gaddamadugu": "https://github.com/d0cd",
     "Amar Shah": "https://amarshah1.github.io/",
+    "Mihir Vahanwala": "https://people.mpi-sws.org/~mvahanwa/",
+    "S. Krishna": "https://www.cse.iitb.ac.in/~krishnas/",
+    "S. N. Krishna": "https://www.cse.iitb.ac.in/~krishnas/",
+    "Parosh A. Abdulla": "https://user.it.uu.se/~parosh/",
+    "P. A. Abdulla": "https://user.it.uu.se/~parosh/",
+    "Mohamed Faouzi Atig": "https://www.katalog.uu.se/profile/?id=N10-529",
+    "M. F. Atig": "https://www.katalog.uu.se/profile/?id=N10-529",
+    "Roland Meyer": "https://www.tcs.cs.tu-bs.de/group/meyer/home.html",
+    "Soham Chakraborty": "https://www.st.ewi.tudelft.nl/sschakraborty/",
+    "Jin Yang": "https://ieeexplore.ieee.org/author/37280193500",
     
     "Waterloo ML + Security + Verification Workshop": "https://ece.uwaterloo.ca/~MLSecurity/index.html",
     "POPL undergraduate student research competition" : "https://popl20.sigplan.org/track/POPL-2020-Student-Research-Competition",
@@ -39,28 +51,20 @@
     "POPL '20 Student Research Competition" : "https://popl20.sigplan.org/track/POPL-2020-Student-Research-Competition",
     "ASE '20 Student Research Competition" : "https://conf.researchr.org/track/ase-2020/ase-2020-student-research-competition#event-overview",
     "Berkeley Programming Systems Seminar": "https://ucbps.github.io/seminar.html",
-    "SMT-COMP 2020" : "https://smt-comp.github.io/2020/",
-
-    "archaeological sites in Colombia" : "https://federicoaureliano.github.io/ArqCol/",
-    "African-American periodicals" : "https://federicoaureliano.github.io/periodicals/",
-    "using a sequence solver to answer StackOverflow questions about DNA": "./blog/seq.html",
-
-    "ASE '18" : "http://www.ase2018.com/",
-    "CAV '18" : "http://cavconference.org/2018/",
-    "SYNT '20" : "http://pl.cs.uchicago.edu/synt2020/",
-    "SYNT '23" : "https://homepage.cs.uiowa.edu/~ajreynol/SYNT2023/",
-    "SMT '20" : "http://smt-workshop.cs.uiowa.edu/2020/",
-    "ASE '20" : "https://conf.researchr.org/home/ase-2020",
-    "VSTTE '20" : "https://sri-csl.github.io/VSTTE20/",
-    "CAV '21" : "http://i-cav.org/2021/",
-    "SAT '21" : "https://www.iiia.csic.es/sat2021/",
-    "ATVA '21": "https://formal-analysis.com/atva/2021/",
-    "WORDS '21" : "https://words2021.sciencesconf.org/",
-    "FM '21" : "https://lcs.ios.ac.cn/fm2021/",
+    
+    "ESOP '21": "https://etaps.org/2021/",
+    "ESOP '22": "https://etaps.org/2022/",
     "CAV '22" : "http://i-cav.org/2022/",
-    "TCS '23" : "https://www.sciencedirect.com/journal/theoretical-computer-science",
-    "OOPSLA '23" : "https://2023.splashcon.org/track/splash-2023-oopsla",
-    "AAAI '24" : "https://aaai.org/aaai-conference/",
+    "FMCAD '22" : "https://fmcad.org/FMCAD22/",
+    "PODC '22" : "https://www.podc.org/podc2022/",
+    "CAV '23" : "https://www.i-cav.org/2023/",
+    "TACAS '23" : "https://etaps.org/2023/",
+    "DAC '23" : "https://www.dac.com/About/Conference-Archive/60th-DAC-2023",
+    "ASPLOS '23" : "https://www.asplos-conference.org/asplos2023/",
+    "FMCAD '23" : "https://fmcad.org/FMCAD23/",
+    "ASPLOS '24" : "https://www.asplos-conference.org/asplos2024/",
+    "KR '20" : "https://kr2020.inf.unibz.it/",
+    "CCS '24" : "https://www.sigsac.org/ccs/CCS2024/",
 
     "Qualcomm Innovation Fellowship": "https://www.qualcomm.com/research/research/university-relations/innovation-fellowship/winners",
 
@@ -70,5 +74,7 @@
 
     "automated reasoning": "https://en.wikipedia.org/wiki/Automated_reasoning",
     "programming language theory": "https://en.wikipedia.org/wiki/Programming_language_theory",
-    "formal methods": "https://en.wikipedia.org/wiki/Formal_methods"
+    "formal methods": "https://en.wikipedia.org/wiki/Formal_methods",
+    "computer security": "https://en.wikipedia.org/wiki/Computer_security",
+    "computer architecture": "https://en.wikipedia.org/wiki/Computer_architecture"
 }

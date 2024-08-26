@@ -1,20 +1,14 @@
 [
     {
         "year"    : "2023",
-        "name"    : "Amar Shah",
+        "name"    : "Leiqi Ye",
         "notes"   : [],
-        "category": "UC Berkeley Undergraduate Students"
+        "category": "University of Michigan Undergraduate Students"
     },
     {
-        "year"    : "2020",
-        "name"    : "Nikhil Pimpalkhare",
-        "notes"   : ["Next: Graduate Student at Princeton University"],
+        "year"    : "2022",
+        "name"    : "Chase Norman",
+        "notes"   : ["Next: Graduate Student at CMU"],
         "category": "UC Berkeley Undergraduate Students"
-    },
-    {
-        "year"    : "2019",
-        "name"    : "Murad Akhundov",
-        "notes"   : ["POPL '20 USRC Winner", "Next: Software Engineer at Okta"],
-        "category": "University of Toronto Undergraduate Students"
     }
 ]

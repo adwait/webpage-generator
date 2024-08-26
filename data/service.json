@@ -1,0 +1,37 @@
+[
+    {
+        "conf": "TACAS",
+        "year": "2024",
+        "sort": "Subreviewer"
+    },
+    {
+        "conf": "LICS",
+        "year": "2024",
+        "sort": "Subreviewer"
+    },
+    {
+        "conf": "RV",
+        "year": "2023",
+        "sort": "Subreviewer"
+    },
+    {
+        "conf": "EMSOFT",
+        "year": "2023",
+        "sort": "Subreviewer"
+    },
+    {
+        "conf": "CAV",
+        "year": "2024",
+        "sort": "Artifact Reviewer"
+    },
+    {
+        "conf": "PLDI",
+        "year": "2024",
+        "sort": "Artifact Reviewer"
+    },
+    {
+        "conf": "CAV",
+        "year": "2021",
+        "sort": "Subreviewer"
+    }
+]

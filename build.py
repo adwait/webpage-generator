@@ -413,6 +413,32 @@ def build_pubs(pubs, mentoring_json: List[Dict[str, str]], full: bool):
     return pubs_html
 
 
+def build_service(service_json: List[Dict[str, str]]):
+
+    if len(service_json) == 0:
+        return ""
+    
+    status("\nAdding service:")
+
+    service_html = '<div class="section">\n'
+    service_html += '<h1>Service</h1>'
+    service_html += '<div class="hbar"></div>\n'
+    service_html += '<div id="service">\n'
+
+    sorts = set([v["sort"] for v in service_json])
+    group_by_sort = {s: [v for v in service_json if v["sort"] == s] for s in sorts}
+
+    for s in group_by_sort:
+        service_html += f'<h3 id="{s}service">{s}</h3>'
+        service_string = ", ".join([serv["conf"] + " " + serv["year"] for serv in group_by_sort[s]])
+        service_html += f'<p>{service_string}</p>'
+
+    service_html += "</div>\n"  # close service
+    service_html += "</div>\n"  # close section
+
+    return service_html
+
+
 def build_profile(profile: Dict[str, str]):
     profile_html = '<div class="profile">\n'
     profile_html += (
@@ -423,8 +449,8 @@ def build_profile(profile: Dict[str, str]):
         profile_html += "<p>" + "</p><p>".join(profile["research"].split("\n")) + "</p>"
     profile_html += "\n<p>Here is my "
     profile_html += '<a href="%s">CV</a> and ' % profile["cv"]
-    profile_html += '<a href="%s">Google Scholar</a>. ' % profile["scholar"]
-    profile_html += "You can reach me at %s." % profile["email"]
+    # profile_html += '<a href="%s">Google Scholar</a>. ' % profile["scholar"]
+    profile_html += "you can reach me at %s." % profile["email"]
     profile_html += "</p>\n"  # close description paragraph
     profile_html += "</div>\n"  # close profile
 
@@ -496,6 +522,7 @@ def build_index(
     news_json: List[Dict[str, str]],
     pubs_bibtex,
     mentoring_json: List[Dict[str, str]],
+    service_json: List[Dict[str, str]],
     links: Dict[str, str],
     notes: Dict[str, str],
     has_dark: bool,
@@ -504,8 +531,9 @@ def build_index(
     body_html += header(has_dark)
     body_html += '<div class="content">\n'
     body_html += build_profile(profile_json)
-    body_html += build_news(news_json, 5, False)
+    # body_html += build_news(news_json, 5, False)
     body_html += build_pubs(pubs_bibtex, mentoring_json, False)
+    body_html += build_service(service_json)
     body_html += "</div>\n"
     body_html += footer_html
     body_html += "</body>\n"
@@ -810,6 +838,8 @@ if __name__ == "__main__":
     paper_html = read_template(f"{config.templates}/paper.html", optional=False)
     news_item_html = read_template(f"{config.templates}/news-item.html", optional=False)
 
+    service_json = read_data("data/service.json", optional=True)
+
     if is_federicos(meta_json["name"]):
         footer_html = """\n<footer>\n<p>Feel free to <a href="https://github.com/FedericoAureliano/FedericoAureliano.github.io">use this website template</a>.</p>\n</footer>\n"""
     else:
@@ -823,7 +853,7 @@ if __name__ == "__main__":
     dark_css = replace_placeholders(dark_css, style_json)
     news_page = build_news_page(news_json, auto_links_json, auto_notes_json, has_dark)
     pubs_page = build_pubs_page(pubs_bibtex, mentoring_json, auto_links_json, auto_notes_json, has_dark)
-    index_page = build_index(profile_json, news_json, pubs_bibtex, mentoring_json, auto_links_json, auto_notes_json, has_dark)
+    index_page = build_index(profile_json, news_json, pubs_bibtex, mentoring_json, service_json, auto_links_json, auto_notes_json, has_dark)
 
     # Write to files
     status("\nWriting website:")
