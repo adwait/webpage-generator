@@ -616,16 +616,16 @@ def build_cv(
     cv_tex += r"\bibliography{cv}" + "\n"
     cv_tex += r"\begin{document}" + "\n\n\n"
 
-    cv_tex += f"\contact{{{meta_json['name']}}}\n"
-    cv_tex += f"{{\MYhref{{{profile_json['website']}}}{{{profile_json['website']}}}}}\n"
-    cv_tex += f"{{\MYhref{{mailto:{profile_json['email']}}}{{{profile_json['email']}}}}}\n\n\n"
+    cv_tex += f"\\contact{{{meta_json['name']}}}\n"
+    cv_tex += f"{{\\link{{{profile_json['website']}}}{{{profile_json['website']}}}}}\n"
+    cv_tex += f"{{\\link{{mailto:{profile_json['email']}}}{{{profile_json['email']}}}}}\n\n\n"
 
-    cv_tex += "\section{Research Interests}\n"
+    cv_tex += "\\section{Research Interests}\n"
     cv_tex += f"{profile_json['research']}\n\n\n"
 
     cv_tex += r"\begin{tblSection}{Education}{0.1}{0.85}" + "\n"
     for edu in education_json:
-        cv_tex += "\degree\n"
+        cv_tex += "\\degree\n"
         cv_tex += f"{{{edu['year']}}}\n"
         cv_tex += f"{{{edu['degree']}}}\n"
         cv_tex += f"{{{edu['note']}}}\n"
@@ -638,7 +638,7 @@ def build_cv(
         sections.append(pub.fields["build_keywords"])
     sections = sorted(list(set(sections)))
     for section in sections:
-        cv_tex += f"\printbibliography[keyword={{{section}}},title={{{section}}},resetnumbers=true]\n"
+        cv_tex += f"\\printbibliography[keyword={{{section}}},title={{{section}}},resetnumbers=true]\n"
     cv_tex += "\n\n\n"
 
     cv_tex += r"\end{document}"

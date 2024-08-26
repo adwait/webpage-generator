@@ -1,5 +1,5 @@
 header {
-    background-color: #1CA3D1;
+    background-color: #00759c;
 }
 
 #scroller {
@@ -22,7 +22,7 @@ h3 {
 }
 
 a {
-    color: #1CA3D1;
+    color: #00759c;
 }
 
 a:hover {
@@ -35,4 +35,8 @@ a:hover {
 
 h3 {
     border-bottom: 1px #003362 dashed;
+}
+
+.headshot {
+    border: 1px solid #ffffff;
 }

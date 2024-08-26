@@ -36,3 +36,7 @@ a:hover {
 h3 {
     border-bottom: 1px divider-color-placeholder dashed;
 }
+
+.headshot {
+    border: 1px solid background-color-placeholder;
+}

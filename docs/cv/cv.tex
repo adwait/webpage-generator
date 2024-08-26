@@ -4,8 +4,22 @@
 
 \lhead{Federico Mora}
 
-\usepackage[backend=biber,style=numeric,refsection=section,maxbibnames=99,sorting=none,defernumbers=true]{biblatex}
-\renewcommand*{\bibfont}{\footnotesize}
+\usepackage[backend=biber,style=numeric,refsection=section,maxbibnames=99,sorting=none,defernumbers=true,uniquename=false]{biblatex}
+\renewcommand*{\bibfont}{\small}
+\renewbibmacro{in:}{}
+\DeclareNameFormat{family}{%
+  \usebibmacro{name:family}
+    {\namepartfamily}
+    {\namepartgiven}
+    {\namepartprefix}
+    {\namepartsuffix}%
+  \usebibmacro{name:andothers}}
+
+\DeclareNameAlias{default}{family}
+
+\DeclareNameAlias{sortname}{default}
+\DeclareNameAlias{labelname}{default}
+
 \bibliography{cv}
 
 \begin{document}
@@ -14,40 +28,62 @@
 {federico.morarocha.ca}
 {fmora@berkeley.edu}
 
-\section{Research Interests} 
-I am interested in automated reasoning, programming language theory, and formal methods. Specifically, I am excited about useful languages that theoretically and empirically lend themselves to efficient reasoning.
-
-\begin{tblSection}{Education}{0.1}{0.85}
-\degree{Ongoing}{Ph.D. in Computer Science} 
+\begin{flushleft}
+\begin{halfTblSubSection}{Education}{0.1}{0.85}
+\degree{202�}{Ph.D. Computer Science} 
 {Advised by \link{https://people.eecs.berkeley.edu/~sseshia/}{Sanjit A. Seshia}}
 {\link{https://eecs.berkeley.edu/}{University of California, Berkeley}}
-\degree{2018}{M.Sc. in Computer Science}
+\degree{2018}{M.Sc. Computer Science}
 {Advised by \link{http://www.cs.toronto.edu/~chechik/}{Marsha Chechik}}
 {\link{http://web.cs.toronto.edu/}{University of Toronto}}
-\degree{2016}{B.Sc. in Computer Science and Mathematics}
+\degree{2016}{B.Sc. Math and Computer Science}
 {First Class Honours with Distinction}
 {\link{http://mta.ca/Prospective/Default.aspx}{Mount Allison University}}
-\end{tblSection}
-
-\let\thefootnote\relax\footnotetext{* denotes undergraduate research mentee}
-\nocite{*}
-\printbibliography[keyword={full},title={Refereed Conference Papers}]
-\printbibliography[keyword={journal},title={Refereed Journal Papers},resetnumbers=true]
-\printbibliography[keyword={short},title={Refereed Short or Tool Papers},resetnumbers=true]
-\printbibliography[keyword={workshop},title={Refereed Workshop Papers or Presentations},resetnumbers=true]
-
-\begin{tblSection}{Industrial Research Positions}{0.1}{0.85}
-\job{2020-21}{Applied Scientist Intern, Amazon}
-{AWS Automated Reasoning Group}
+\end{halfTblSubSection}
+% \hfill
+~~~~~~~~ % spaces out the two columns because \hfill is too long for some reason
+\begin{halfTblSubSection}{Employment}{0.1}{0.85}
+\job{\multirow{ 2}{\hsize}{\small{2020, 2021, 2024}}}{Applied Scientist Intern}
+{Amazon Web Services}
 {Supervised by \link{http://ankushdesai.com/}{Ankush Desai}}
 \job{2017}{Research Intern, General Motors}
 {Electronic Control Systems Lab}
 {Supervised by \link{https://scholar.google.ca/citations?user=leik1dQAAAAJ\&hl=en}{Ramesh S}}
-\end{tblSection}
+\end{halfTblSubSection}
+\end{flushleft}
 
-\begin{tblSection}{Teaching Experience}{0.1}{0.85}
-\job{2022-23}{Guest Lectures, UC Berkeley} 
+\section{Research\protect\footnote{Awarded the Qualcomm Innovation Fellowship}}
+
+I am interested in automated reasoning, programming language theory, and formal
+methods. Specifically, I am excited about useful languages that theoretically
+and empirically lend themselves to efficient reasoning. All of my
+publications---which are listed below---relate to this theme.
+
+\nocite{*}
+\printbibliography[heading=subbibliography,keyword={full},title={Refereed Conference Papers\protect\footnote{Denotes undergraduate research mentee}}]
+\printbibliography[heading=subbibliography,keyword={journal},title={Refereed Journal Papers}]
+\printbibliography[heading=subbibliography,keyword={short},title={Refereed Short or Tool Papers}]
+\printbibliography[heading=subbibliography,keyword={workshop},title={Refereed Workshop Papers or Presentations}]
+
+\begin{tblSubSection}{Grant Writing Contributions}{0.1}{0.88}
+\grant{2021}{\link{https://www.amazon.science/research-awards/program-updates/spring-2021-amazon-research-awards-recipients-announced}{Amazon Research Award} \normalfont{(with Sanjit A. Seshia as PI)}}
+{``Scalable Verification of Secure Distributed Services through Synthesis and Learning''}
+\end{tblSubSection}
+
+
+\section{Teaching and Mentoring\protect\footnote{Received UC Berkeley's Outstanding Graduate Student Peer Mentor and Teaching Assistant Awards}}
+
+My teaching and mentoring is primarily influenced by universal design for
+learning (UDL) principles. I am particularly interested in how autograders can
+maximize student autonomy and encourage active learning. I have taught at
+the undergraduate and graduate levels and covered topics including programming
+languages, formal methods, software engineering, and artificial intelligence.
+
+
+\begin{tblSubSection}{Courses Taught}{0.1}{0.85}
+\job{2022-24}{Guest Lectures, UC Berkeley} 
 {\link{https://people.eecs.berkeley.edu/~sseshia/219c/}{EECS 219C}: Formal Methods: Specification, Verification, and Synthesis}
+{\quad - Abstraction and Verification by Reduction to Synthesis} 
 {\quad - Interpolation-Based Model Checking and IC3}
 {\quad - Satisfiability Modulo Theories - Part II: Theories and Theory Solvers}
 {\quad - Syntax-Guided Synthesis} 
@@ -60,23 +96,38 @@ I am interested in automated reasoning, programming language theory, and formal 
 {\link{http://www.teach.cs.toronto.edu/~csc384h/winter/}{CSC 384}: Introduction to Artificial Intelligence (2)}
 {\link{http://www.cs.toronto.edu/~chechik/courses16/csc410/}{CSC 410}: Software Testing and Verification (2)}
 \job{2015-16}{Teaching Assistant, Mount Allison University}{COMP 1631: Introduction to Computer Science}
-\end{tblSection}
+\end{tblSubSection}
 
-\begin{tblSection}{Grant Writing Contributions}{0.1}{0.85}
-\leftrightsingle{}{With Sanjit A. Seshia as PI/Co-PI}
-\grant{2021}{\link{https://www.amazon.science/research-awards/program-updates/spring-2021-amazon-research-awards-recipients-announced}{Amazon Research Award}}
-{``Scalable Verification of Secure Distributed Services through Synthesis and Learning''}
-\end{tblSection}
+\begin{tblSubSection}{Students Mentored}{0.1}{0.85}
+\students{2020-}{UC Berkeley Undergraduate Students}
+{Amar Shah (\link{https://src.acm.org/}{ACM SRC Grand Finals Runner-up}),
+Annamira O'Toole, Selina Kim, Nikhil Pimpalkhare (co-mentored with Elizabeth Polgreen)}
+\students{2023-}{MiraCosta College Students}
+{Haley Lepe
+(\link{https://www.sacnas.org/diversity-news/stem-students-recognized-for-research-and-presentation-skills-at-2023ndistem}
+{NDiSTEM \textquotesingle23 Presentation Award Winner})}
+\students{2022-23}{City College of San Francisco Students}
+{Isaac Chan (co-mentored with Lauren Pick)}
+\students{2018-20}{University of Toronto Undergraduate Students}
+{Murad Akhundov
+(\link{https://popl20.sigplan.org/track/POPL-2020-Student-Research-Competition}
+{POPL \textquotesingle20 USRC Winner}), Lukas Finnbarr O'Callahan, Alex Tough}
+\end{tblSubSection}
 
-\clearpage
 
-\begin{tblSection}{Professional Service}{0.95}{0}
+\section{Service\protect\footnote{Received UC Berkeley's EECS Department Chair's Graduate Award}}
+
+I prioritize service that promotes diversity, equity, and inclusion in computer
+science. Whether directly, like through application assistance, or
+indirectly, like through outreach at local schools.
+
+\begin{tblSubSection}{Professional Service}{0.95}{0}
 \service{Organizer}
 {\link{http://ps.berkeley.edu/seminar.html}{Berkeley Programming Systems Seminar Series} (Summer \textquotesingle20)}
-\service{Reviewer}
-{Formal Methods in System Design (\link{https://www.springer.com/journal/10703}{FMSD} \textquotesingle22)}
 \service{Artifact Evaluation Committee Member}
 {Tools and Algorithms for the Construction and Analysis of Systems (\link{https://etaps.org/2023/tacas}{TACAS} \textquotesingle23)}
+\service{Reviewer}
+{Formal Methods in System Design (\link{https://www.springer.com/journal/10703}{FMSD} \textquotesingle22)}
 \service{External Reviewer or Subreviewer}
 % Didn't get credit for ASE '19
 {Automated Software Engineering (\link{https://2019.ase-conferences.org/}{ASE} \textquotesingle17, \textquotesingle18, \textquotesingle19)}
@@ -87,67 +138,38 @@ I am interested in automated reasoning, programming language theory, and formal 
 {Programming Language Design and Implementation (\link{https://pldi21.sigplan.org/}{PLDI} \textquotesingle21)}
 {Tools and Algorithms for the Construction and Analysis of Systems (\link{https://etaps.org/2024/tacas}{TACAS} \textquotesingle21, \textquotesingle24)}
 {Verification, Model Checking, and Abstract Interpretation (\link{https://popl24.sigplan.org/home/VMCAI-2024}{VMCAI} \textquotesingle24)}
+{Object-Oriented Programming, Systems, Languages and Applications (\link{https://2024.splashcon.org/track/splash-2024-oopsla}{OOPSLA} \textquotesingle24)}
 \service{Conference or Workshop Student Volunteer}
 {Programming Language Design and Implementation (\link{https://pldi22.sigplan.org/}{PLDI} \textquotesingle22)}
 {\link{https://berkeleylearnverify.github.io/BryantFLoC22/}{\textbf{B}ryant \textbf{D}iscoveries \textbf{D}ay} (FLoC \textquotesingle22)}
 {\link{https://ece.uwaterloo.ca/~MLSecurity/index.html}{Waterloo Machine Learning, Verification, and Security Workshop} (\textquotesingle19)}
-\service{Other Service}
-{UC Berkeley EECS \link{https://sites.google.com/berkeley.edu/eaaa/home}{Equal Access to Application Assistance} Reviewer (\textquotesingle23)}
-{UC Berkeley EECS Visit Day Coordinator (\textquotesingle21)}
-{UC Berkeley CSGSA Social Chair (\textquotesingle20)}
-\end{tblSection}
-
-\begin{tblSection}{Awards and Distinctions}{0.1}{0.85}
-\award{2023}{Undergraduate Research Mentoring Award (UC Berkeley)}
-\award{2022-23}{{\link{https://www2.eecs.berkeley.edu/Students/Awards/13/}{EECS Outstanding Teaching Assistant Award} (UC Berkeley)}}
-\award{2021-22}{{\link{https://gsi.berkeley.edu/programs-services/award-programs/ogsi/}{Outstanding Graduate Student Instructor Award} (UC Berkeley)}}
-\award{2021}{\link{https://www.qualcomm.com/research/research/university-relations/innovation-fellowship/winners}{Qualcomm Innovation Fellowship}}
-\award{2020-21}{\link{https://www2.eecs.berkeley.edu/Students/Awards/109/}{EECS Chair's Graduate Award} (UC Berkeley)}
-\award{2019}{EECS Department Fellowship (UC Berkeley)}
-\award{2018}{C. C. Gotlieb (Kelly) Graduate Fellowship (University of Toronto)}
-\award{2017}{Alfred B. Lehman Graduate Scholarship (University of Toronto)}
-\end{tblSection}
-
-\begin{tblSection}{Research Mentoring}{0.1}{0.85}
-\students{2020-}{UC Berkeley Undergraduate Students}
-{Amar Shah (\link{https://pldi23.sigplan.org/track/pldi-2023-src}
-{PLDI \textquotesingle23 USRC Winner}), Annamira O'Toole, Selina Kim, Nikhil Pimpalkhare}
-\students{2023-}{MiraCosta College Students}
-{Haley Lepe
-(\link{https://www.sacnas.org/diversity-news/stem-students-recognized-for-research-and-presentation-skills-at-2023ndistem}
-{NDiSTEM \textquotesingle23 Presentation Award Winner})}
-\students{2022-23}{City College of San Francisco Students}
-{Isaac Chan}
-\students{2018-20}{University of Toronto Undergraduate Students}
-{Murad Akhundov
-(\link{https://popl20.sigplan.org/track/POPL-2020-Student-Research-Competition}
-{POPL \textquotesingle20 USRC Winner}), Lukas Finnbarr O'Callahan, Alex Tough}
-\end{tblSection}
+\service{UC Berkeley EECS Departmental Service}
+{CS Faculty Hiring Committee (\textquotesingle24)}
+{\link{https://sites.google.com/berkeley.edu/eaaa/home}{Equal Access to Application Assistance} Reviewer (\textquotesingle23)}
+{Visit Day Coordinator (\textquotesingle21)}
+{CSGSA Social Chair (\textquotesingle19, \textquotesingle20)}
+\end{tblSubSection}
 
 \clearpage
-
-\begin{tblSection}{Community Service}{0.1}{0.85}
+\begin{tblSubSection}{Community Outreach}{0.1}{0.85}
 \job{2022}{{\link{https://cltc.berkeley.edu/about-us/citizen-clinic/}{Citizen Clinic}}} 
 {Worked with indigenous land rights activists to help them defend themselves and their communities from cyber threats.}
 \job{2022}{{\link{https://crscience.org/outreach/beascientist/}{Be A Scientist}}} 
-{Mentored a group of four seventh grade students in Spanish.}
-{Students designed and conducted their own scientific experiment over a six-week-long lab.}
+{Mentored a group of four seventh grade students in Spanish. Students designed and conducted their own scientific experiment over a six-week-long lab.}
 \job{2020}{{\link{https://crscience.org/you-belong-lessons-promote-inclusion-and-diversity/}{Bay Area Scientists in Schools} (BASIS)}} 
-{Developed a new bilingual ``You Belong'' lesson on Ynés Mexía's research.} 
-{Lesson delivered to schools serving low-income and historically marginalized communities.}
-\end{tblSection}
+{Developed a new bilingual ``You Belong'' lesson on Ynés Mexía's research. Lesson delivered to schools serving low-income and historically marginalized communities.}
+\end{tblSubSection}
 
-\begin{tblSection}{Non-Academic}{0.15}{0.8125}
-\leftrightsingle{Languages}
-{English (native), Spanish (native), and French (basic).}
-\leftrightsingle{Certificates}
-{Canadian Soccer Association community coaching: ``Active Start'' (ages 4-6), 
-``Fundamentals'' (ages 6-9), and ``Learning to Train'' (ages 8-12).}
-\leftrightsingle{Awards}
-{Canadian Interuniversity Sport Academic All-Canadian (4); Jack Drover Athletics 
-Award (2); David MacArel MacAulay Award (2); Mount Allison men's varsity soccer 
-team captain (2); Soccer New Brunswick Male Bursary Award (1); and New Brunswick 
-provincial soccer team captain (1).}
+\begin{tblSection}{Awards and Distinctions\protect\footnote{Excluding awards from undergraduate studies or earlier}}{0.1}{0.85}
+\award{2024}{\link{https://ga.berkeley.edu/ga-news/ga-mentorship-awards/}{Outstanding Graduate Student Peer Mentor Award} (UC Berkeley)}
+\award{2024}{\link{https://www2.eecs.berkeley.edu/Students/Awards/1/}{Demetri Angelakos Memorial Achievement Award} (UC Berkeley EECS)}
+\award{2023}{{\link{https://www2.eecs.berkeley.edu/Students/Awards/13/}{Outstanding Teaching Assistant Award} (UC Berkeley EECS)}}
+\award{2022}{{\link{https://gsi.berkeley.edu/programs-services/award-programs/ogsi/}{Outstanding Graduate Student Instructor Award} (UC Berkeley)}}
+\award{2021}{\link{https://www.qualcomm.com/research/research/university-relations/innovation-fellowship/winners}{Qualcomm Innovation Fellowship}}
+\award{2021}{\link{https://www2.eecs.berkeley.edu/Students/Awards/109/}{Chair's Graduate Award} (UC Berkeley EECS)}
+\award{2019}{Department Fellowship (UC Berkeley EECS)}
+\award{2018}{C. C. Gotlieb (Kelly) Graduate Fellowship (University of Toronto CS)}
+\award{2017}{Alfred B. Lehman Graduate Scholarship (University of Toronto CS)}
 \end{tblSection}
 
 \end{document}
